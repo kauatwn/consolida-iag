@@ -7,6 +7,7 @@ Bem-vindo ao repositório **Consolida IAG**. Este documento estabelece as diretr
 ## 📌 Visão Geral do Projeto
 
 O **Consolida IAG** gerencia a intenção de compra semanal para o **Instituto Anchieta Grajaú (IAG)**, atendendo a 3 serviços operacionais:
+
 * **CEI** (Centro de Educação Infantil)
 * **CCA** (Centro para Crianças e Adolescentes)
 * **CJ** (Centro de Juventude)
@@ -45,6 +46,7 @@ As especificações e restrições detalhadas do projeto estão organizadas no d
 ## 🛡️ Invariantes de Desenvolvimento e Decisões Críticas
 
 Ao propor ou implementar qualquer funcionalidade:
+
 * **Decisão 3 Serviços vs. 2 Cozinhas Físicas:** Embora o espaço predial possua 2 cozinhas físicas, o sistema é estruturado estritamente sobre os **3 Centros de Custo** (`CEI`, `CCA`, `CJ`) para viabilizar as 3 Notas Fiscais exigidas pela prestação de contas. Nunca modele tabelas baseadas em cozinhas físicas.
 * **Não-destrutividade:** A consolidação de pedidos é estritamente uma visão derivada (soma matemática exata); nunca sobrescreva nem delete registros originais submetidos pelos Serviços.
 * **Rastreabilidade Fiscal:** Toda linha de pedido e todo relatório individualizado deve permitir a conferência item a item com a respectiva Nota Fiscal do Serviço (Centro de Custo), inclusive na exportação em PDF.

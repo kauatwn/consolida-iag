@@ -27,6 +27,7 @@ Any frontend design, component implementation, or user journey created by the Ag
 A interface dos serviços opera em ambiente web responsivo mobile-first acessada diretamente por link ou identificador do serviço:
 
 ### 2.1 Requisitos de Interação
+
 1. **Identificação Clara do Serviço:** A tela deve exibir em destaque o Serviço ativo (`CEI`, `CCA` ou `CJ`).
 2. **Catálogo Pré-carregado:** Exibição em lista dos insumos ativos recorrentes da instituição (ex: Arroz, Feijão, Óleo, Detergente).
 3. **Controles de Quantidade Numérica:**
@@ -48,20 +49,24 @@ A interface dos serviços opera em ambiente web responsivo mobile-first acessada
 O painel de compras e gestão opera em ambiente web desktop estruturado em **duas abas centrais**:
 
 ### 3.1 Aba 1 — Visão Consolidada (Negociação & Atacado)
-* **Objetivo:** Permitir ao comprador negociar melhores preços por volume com fornecedores atacadistas.
-* **Comportamento:**
-  * Agrupamento automático por produto.
-  * Soma matemática exata das quantidades de todos os serviços participantes no ciclo ativo (RN-03.1).
-  * Exemplo visual: *Arroz Agulhinha Tipo 1: 20kg [CEI] + 15kg [CCA] + 25kg [CJ] = 60kg total*.
-  * Consolidação em tempo real ou sob demanda de forma puramente derivada (RN-03.2).
+
+- **Objetivo:** Permitir ao comprador negociar melhores preços por volume com fornecedores atacadistas.
+
+- **Comportamento:**
+  - Agrupamento automático por produto.
+  - Soma matemática exata das quantidades de todos os serviços participantes no ciclo ativo (RN-03.1).
+  - Exemplo visual: *Arroz Agulhinha Tipo 1: 20kg [CEI] + 15kg [CCA] + 25kg [CJ] = 60kg total*.
+  - Consolidação em tempo real ou sob demanda de forma puramente derivada (RN-03.2).
 
 ### 3.2 Aba 2 — Visão por Serviço (Prestação de Contas & Auditoria)
-* **Objetivo:** Conferência física item a item com as Notas Fiscais emitidas e envio ao setor financeiro.
-* **Comportamento:**
-  * Filtro seletor por Serviço (`CEI`, `CCA` ou `CJ`).
-  * Exibição estrita dos itens e quantidades solicitados exclusivamente por aquele Centro de Custo (RN-04.2).
-  * Exibição das observações de texto livre submetidas pelo respectivo serviço.
-  * **Exportação em PDF e Impressão:** Botão de ação para gerar documento formatado para impressão física, contendo cabeçalho com identificação do Centro de Custo, data do ciclo e relação de itens para conferência na entrega da mercadoria.
+
+- **Objetivo:** Conferência física item a item com as Notas Fiscais emitidas e envio ao setor financeiro.
+
+- **Comportamento:**
+  - Filtro seletor por Serviço (`CEI`, `CCA` ou `CJ`).
+  - Exibição estrita dos itens e quantidades solicitados exclusivamente por aquele Centro de Custo (RN-04.2).
+  - Exibição das observações de texto livre submetidas pelo respectivo serviço.
+  - **Exportação em PDF e Impressão:** Botão de ação para gerar documento formatado para impressão física, contendo cabeçalho com identificação do Centro de Custo, data do ciclo e relação de itens para conferência na entrega da mercadoria.
 
 ---
 

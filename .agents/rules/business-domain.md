@@ -18,7 +18,9 @@ When designing, implementing, refactoring, or testing the system, the Agent **MU
 The system manages the weekly purchase intent for **Instituto Anchieta Grajaú (IAG)**, centralizing purchase requests across three operational services to prevent duplication while preserving fiscal accountability and auditability.
 
 ### 1.1 Serviço (Centro de Custo / Unidade Fiscal)
+
 Represents an administrative and fiscal cost center unit. The only valid services are:
+
 * **CEI** (*Centro de Educação Infantil*)
 * **CCA** (*Centro para Crianças e Adolescentes*)
 * **CJ** (*Centro de Juventude*)
@@ -28,9 +30,11 @@ Represents an administrative and fiscal cost center unit. The only valid service
 > A instituição conta fisicamente com apenas 2 espaços de cozinha, porém a prestação de contas governamental exige rigorosamente a separação de 3 Notas Fiscais distintas para os 3 Centros de Custo. Portanto, o sistema **NUNCA** deve modelar entidades como "Cozinha" baseadas na planta física predial. O modelo de dados, rotas e pedidos deve ser estritamente estruturado em torno dos **3 Serviços** (`CEI`, `CCA` e `CJ`).
 
 ### 1.2 Produto (Item de Catálogo)
+
 Represents an active input/item registered in the institution's general catalog.
 
 ### 1.3 Solicitação Semanal (Ciclo de Pedido de Compras)
+
 Represents a weekly purchase request submitted by a specific `Serviço` for an active purchase cycle.
 
 ---

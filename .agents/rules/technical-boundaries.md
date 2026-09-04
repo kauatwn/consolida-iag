@@ -32,10 +32,12 @@ The following capabilities are explicitly outside the scope of the system:
 ## 2. Technical Invariants & Data Integrity
 
 ### 2.1 Database & Persistence Level
+
 * **Individual Origin Preservation:** Never merge or normalize records across services into a single destructive record. Every requested quantity line item must retain its foreign key / association to the originating `Serviço`.
 * **Immutability of Historical Cycles:** Past purchase cycles must be immutable once closed/finalized to ensure clean audit trails.
 
 ### 2.2 Reporting & Views
+
 * **Consolidated View:** Read-only / derived aggregation across all services for supplier negotiation.
 * **Individual View:** Filtered by single `Serviço` (CEI, CCA, or CJ) for reconciliation against physical invoice delivery.
 
