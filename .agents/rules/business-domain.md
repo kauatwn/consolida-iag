@@ -23,6 +23,10 @@ Represents an administrative and fiscal cost center unit. The only valid service
 * **CCA** (*Centro para Crianças e Adolescentes*)
 * **CJ** (*Centro de Juventude*)
 
+> [!IMPORTANT]
+> **Decisão de Modelagem Crítica: 3 Serviços Fiscais vs. 2 Cozinhas Físicas**
+> A instituição conta fisicamente com apenas 2 espaços de cozinha, porém a prestação de contas governamental exige rigorosamente a separação de 3 Notas Fiscais distintas para os 3 Centros de Custo. Portanto, o sistema **NUNCA** deve modelar entidades como "Cozinha" baseadas na planta física predial. O modelo de dados, rotas e pedidos deve ser estritamente estruturado em torno dos **3 Serviços** (`CEI`, `CCA` e `CJ`).
+
 ### 1.2 Produto (Item de Catálogo)
 Represents an active input/item registered in the institution's general catalog.
 
@@ -53,7 +57,7 @@ Represents a weekly purchase request submitted by a specific `Serviço` for an a
 ### RN-04: Relatórios e Conferência de Prestação de Contas
 
 * **RN-04.1:** O sistema deve fornecer a extração da listagem unificada de compras (**Visão Consolidada**) com o somatório total dos produtos para negociação com fornecedores. *(The system MUST provide a consolidated purchase view containing the total quantity of each product for supplier negotiation).*
-* **RN-04.2:** O sistema deve fornecer a extração individualizada por Serviço (**Visão por Serviço**), exibindo apenas os itens e quantidades solicitados por aquele CNPJ/Centro de Custo, para bater com a respectiva Nota Fiscal. *(The system MUST provide an individual view per Serviço containing only the products and quantities requested by that Serviço to reconcile against the corresponding invoice).*
+* **RN-04.2:** O sistema deve fornecer a extração individualizada por Serviço (**Visão por Serviço**), com suporte a exportação em PDF e formato para impressão, exibindo apenas os itens e quantidades solicitados por aquele CNPJ/Centro de Custo, para conferência direta com a respectiva Nota Fiscal física e encaminhamento ao setor financeiro. *(The system MUST provide an individual view per Serviço with PDF export and print support, containing only the products and quantities requested by that Serviço to reconcile against the corresponding physical invoice).*
 
 ---
 

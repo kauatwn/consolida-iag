@@ -28,16 +28,24 @@ As especificações e restrições detalhadas do projeto estão organizadas no d
      * **RN-04:** Relatórios e Conferência de Prestação de Contas (RN-04.1, RN-04.2).
 
 2. **Fronteiras e Fora de Escopo:** @.agents/rules/technical-boundaries.md
-   * Restrições explícitas contra escopo não planejado:
+   * Restrições explícitas contra escopo não planejado (Proteção do prazo de 4 meses do MVP):
      * ❌ **Sem Controle de Estoque Ativo** (sem saldo de almoxarifado, consumo diário ou entrada física).
      * ❌ **Sem Integração Fiscal com SEFAZ/Governo** (sem emissão ou validação de NF-e).
      * ❌ **Sem Cotação Financeira Automatizada / Pagamentos** (sem APIs de pagamento ou precificação bancária).
+     * ❌ **Sem Aplicativo Mobile Nativo** (solução estritamente Web Responsiva; sem Android/iOS em lojas).
+
+3. **Interface e Fluxos Operacionais (UI/UX):** @.agents/rules/ui-ux-flow.md
+   * **Mobile Solicitante (Cozinha/Serviço):** Lista pré-carregada, botões grandes de `+`/`-`, zero digitação de nomes, preenchimento em < 2 minutos.
+   * **Desktop Comprador/Gestor:** Painel com 2 abas:
+     * *Aba 1 (Consolidada):* Agrupamento e soma exata para cotação em atacado.
+     * *Aba 2 (Por Serviço):* Filtro individualizado com exportação em PDF e formato de impressão para conferência de Nota Fiscal.
 
 ---
 
-## 🛡️ Invariantes de Desenvolvimento e Qualidade
+## 🛡️ Invariantes de Desenvolvimento e Decisões Críticas
 
 Ao propor ou implementar qualquer funcionalidade:
+* **Decisão 3 Serviços vs. 2 Cozinhas Físicas:** Embora o espaço predial possua 2 cozinhas físicas, o sistema é estruturado estritamente sobre os **3 Centros de Custo** (`CEI`, `CCA`, `CJ`) para viabilizar as 3 Notas Fiscais exigidas pela prestação de contas. Nunca modele tabelas baseadas em cozinhas físicas.
 * **Não-destrutividade:** A consolidação de pedidos é estritamente uma visão derivada (soma matemática exata); nunca sobrescreva nem delete registros originais submetidos pelos Serviços.
-* **Rastreabilidade Fiscal:** Toda linha de pedido e todo relatório individualizado deve permitir a conferência item a item com a respectiva Nota Fiscal do Serviço (Centro de Custo).
+* **Rastreabilidade Fiscal:** Toda linha de pedido e todo relatório individualizado deve permitir a conferência item a item com a respectiva Nota Fiscal do Serviço (Centro de Custo), inclusive na exportação em PDF.
 * **Conflitos de Regra:** Se qualquer solicitação ou decisão técnica entrar em conflito com as regras de negócio ou limites de escopo, alerte o usuário antes de prosseguir com a implementação.
