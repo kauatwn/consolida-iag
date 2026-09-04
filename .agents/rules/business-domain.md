@@ -27,15 +27,27 @@ Represents an administrative and fiscal cost center unit. The only valid service
 
 > [!IMPORTANT]
 > **Decisão de Modelagem Crítica: 3 Serviços Fiscais vs. 2 Cozinhas Físicas**
-> A instituição conta fisicamente com apenas 2 espaços de cozinha, porém a prestação de contas governamental exige rigorosamente a separação de 3 Notas Fiscais distintas para os 3 Centros de Custo. Portanto, o sistema **NUNCA** deve modelar entidades como "Cozinha" baseadas na planta física predial. O modelo de dados, rotas e pedidos deve ser estritamente estruturado em torno dos **3 Serviços** (`CEI`, `CCA` e `CJ`).
+> A instituição conta fisicamente com apenas 2 espaços de cozinha, porém a prestação de contas governamental exige rigorosamente a separação de 3 Notas Fiscais distintas para os 3 Centros de Custo. Portanto, o sistema **NUNCA** deve modelar entidades como "Cozinha" baseadas na planta física predial. O modelo de dados, tabelas e rotas deve ser estritamente estruturado em torno dos **3 Serviços** (`CEI`, `CCA` e `CJ`).
 
-### 1.2 Produto (Item de Catálogo)
+### 1.2 Produto (Item de Catálogo e Unidade de Medida)
 
-Represents an active input/item registered in the institution's general catalog.
+Represents an active supply item registered in the institution's general catalog.
 
-### 1.3 Solicitação Semanal (Ciclo de Pedido de Compras)
+* **Atributos essenciais:** `id`, `nome`, `unidade_medida` (ex.: `"kg"`, `"litro"`, `"unidade"`, `"pacote"`) e `ativo`.
+* **Unidade de Medida Padrão:** Cada produto possui uma unidade de medida predefinida e fixa no catálogo. A inserção de quantidades opera sobre essa unidade, viabilizando a soma matemática homogênea na consolidação.
 
-Represents a weekly purchase request submitted by a specific `Serviço` for an active purchase cycle.
+### 1.3 Ciclo Semanal de Compras (CicloSemanal)
+
+Represents the weekly purchasing timeframe during which requests can be placed and finalized.
+
+* **Estados do Ciclo:**
+  * `ABERTO`: Período ativo em que os Serviços podem submeter suas solicitações semanais.
+  * `FECHADO`: Período encerrado pelo comprador/gestor. Uma vez fechado, torna-se **estritamente imutável** para garantir a integridade da cotação e da prestação de contas.
+* Apenas um ciclo semanal pode estar no estado `ABERTO` simultaneamente.
+
+### 1.4 Solicitação Semanal (Pedido de Compras do Serviço)
+
+Represents a weekly purchase request submitted by a specific `Serviço` within an active `CicloSemanal`. Contém os itens solicitados com suas quantidades e observações pontuais.
 
 ---
 
@@ -52,16 +64,18 @@ Represents a weekly purchase request submitted by a specific `Serviço` for an a
 * **RN-02.2:** O envio da solicitação exige a definição de quantidade maior que zero para ao menos um produto do catálogo. *(A purchase request MAY only be submitted when at least one catalog product has a quantity greater than zero).*
 * **RN-02.3:** A solicitação deve permitir a inclusão de um campo de observação de texto livre por Serviço para registrar necessidades pontuais não catalogadas. *(A purchase request MUST allow a free-text observation field per Serviço to record specific non-cataloged needs).*
 * **RN-02.4:** Apenas uma solicitação ativa por Serviço é permitida por ciclo semanal de compra. *(Only one active purchase request per Serviço is allowed for each weekly purchase cycle).*
+* **RN-02.5:** O sistema deve rejeitar qualquer criação, edição ou remoção de solicitações vinculadas a um ciclo com status `FECHADO`. *(The system MUST reject any submission, modification, or deletion of requests linked to a CLOSED purchase cycle).*
 
 ### RN-03: Consolidação e Agrupamento de Compras
 
 * **RN-03.1:** O cálculo da necessidade de compra para cotação em atacado deve realizar a soma matemática exata das quantidades solicitadas para o mesmo produto entre todos os serviços no ciclo corrente. *(The consolidated purchase quantity for a product MUST be the exact mathematical sum of the quantities requested for that product by all participating Serviços in the current cycle).*
 * **RN-03.2:** A consolidação de quantidades para cotação não altera, sobrescreve ou apaga os quantitativos originais submetidos por cada Serviço individualmente. A visão consolidada é uma representação derivada. *(Consolidation MUST NOT modify, overwrite, or delete original quantities submitted by individual Serviços. The consolidated view is strictly a derived representation).*
 
-### RN-04: Relatórios e Conferência de Prestação de Contas
+### RN-04: Relatórios, Conferência e Histórico
 
 * **RN-04.1:** O sistema deve fornecer a extração da listagem unificada de compras (**Visão Consolidada**) com o somatório total dos produtos para negociação com fornecedores. *(The system MUST provide a consolidated purchase view containing the total quantity of each product for supplier negotiation).*
-* **RN-04.2:** O sistema deve fornecer a extração individualizada por Serviço (**Visão por Serviço**), com suporte a exportação em PDF e formato para impressão, exibindo apenas os itens e quantidades solicitados por aquele CNPJ/Centro de Custo, para conferência direta com a respectiva Nota Fiscal física e encaminhamento ao setor financeiro. *(The system MUST provide an individual view per Serviço with PDF export and print support, containing only the products and quantities requested by that Serviço to reconcile against the corresponding physical invoice).*
+* **RN-04.2:** O sistema deve fornecer a extração individualizada por Serviço (**Visão por Serviço**), exibindo apenas os itens e quantidades solicitados por aquele CNPJ/Centro de Custo, para bater com a respectiva Nota Fiscal física e envio ao setor financeiro. *(The system MUST provide an individual view per Serviço containing only the products and quantities requested by that Serviço to reconcile against the corresponding invoice).*
+* **RN-04.3:** O sistema deve permitir a consulta e exportação do **Histórico de Ciclos Fechados**, garantindo acesso retroativo aos pedidos individuais e consolidados de semanas anteriores para fins de auditoria contábil. *(The system MUST support querying and retrieving past CLOSED cycles for audit and reconciliation).*
 
 ---
 
