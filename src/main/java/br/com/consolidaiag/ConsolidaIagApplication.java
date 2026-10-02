@@ -1,4 +1,4 @@
-package br.com.cosolidaiag;
+package br.com.consolidaiag;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
