@@ -8,7 +8,7 @@
         <version>4.1.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>br.com.cosolidaiag</groupId>
+    <groupId>br.com.consolidaiag</groupId>
     <artifactId>consolida-iag</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>consolida-iag</name>
