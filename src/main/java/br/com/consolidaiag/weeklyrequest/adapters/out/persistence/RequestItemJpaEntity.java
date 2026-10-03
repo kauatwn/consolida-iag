@@ -21,6 +21,10 @@ public class RequestItemJpaEntity {
     @Column(nullable = false, precision = 10, scale = 2)
     private java.math.BigDecimal quantity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id", nullable = false)
+    private WeeklyRequestJpaEntity request;
+
     // Construtor vazio exigido pelo JPA
     public RequestItemJpaEntity() {}
 
@@ -51,5 +55,13 @@ public class RequestItemJpaEntity {
 
     public void setQuantity(java.math.BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    public WeeklyRequestJpaEntity getRequest() {
+        return request;
+    }
+
+    public void setRequest(WeeklyRequestJpaEntity request) {
+        this.request = request;
     }
 }
