@@ -13,6 +13,5 @@ public record SubmitWeeklyRequestPayload(
     String observation,
 
     @NotEmpty(message = "A solicitação deve conter pelo menos um item")
-    @Valid
-    List<ItemPayload> items
+    List<@Valid ItemPayload> items
 ) {}
