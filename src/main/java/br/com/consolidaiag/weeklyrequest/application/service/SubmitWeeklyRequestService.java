@@ -56,7 +56,7 @@ public class SubmitWeeklyRequestService implements SubmitWeeklyRequestUseCase {
         }
 
         // Cria a entidade
-        WeeklyRequest request = new WeeklyRequest(
+        WeeklyRequest request = WeeklyRequest.create(
             payload.serviceCode(),
             activeCycleId,
             payload.observation()
