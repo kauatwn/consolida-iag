@@ -1,0 +1,47 @@
+package br.com.consolidaiag.catalog.adapters.out.persistence;
+
+import br.com.consolidaiag.catalog.domain.UnitMeasure;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "products")
+public class ProductJpaEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "unit_measure", nullable = false)
+    private UnitMeasure unitMeasure;
+
+    @Column(nullable = false)
+    private boolean active;
+
+    // Construtor vazio exigido pelo Hibernate
+    public ProductJpaEntity() {
+    }
+
+    public ProductJpaEntity(Long id, String name, UnitMeasure unitMeasure, boolean active) {
+        this.id = id;
+        this.name = name;
+        this.unitMeasure = unitMeasure;
+        this.active = active;
+    }
+
+    // Getters e Setters anêmicos liberados (são para uso exclusivo do Framework/Mapper)
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public UnitMeasure getUnitMeasure() { return unitMeasure; }
+    public void setUnitMeasure(UnitMeasure unitMeasure) { this.unitMeasure = unitMeasure; }
+
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+}
