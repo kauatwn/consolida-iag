@@ -15,7 +15,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/requests")
-public class WeeklyRequestController {
+public class WeeklyRequestController implements WeeklyRequestApi {
 
     private final SubmitWeeklyRequestUseCase submitWeeklyRequestUseCase;
 
@@ -23,6 +23,7 @@ public class WeeklyRequestController {
         this.submitWeeklyRequestUseCase = submitWeeklyRequestUseCase;
     }
 
+    @Override
     @PostMapping
     public ResponseEntity<SubmitWeeklyRequestResponse> submit(@Valid @RequestBody SubmitWeeklyRequestPayload payload) {
         SubmitWeeklyRequestResponse response = submitWeeklyRequestUseCase.execute(payload);
