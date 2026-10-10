@@ -2,16 +2,17 @@ package br.com.consolidaiag.weeklyrequest.adapters.out.persistence;
 
 import br.com.consolidaiag.weeklyrequest.domain.ServiceCode;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(
-    name = "requests",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "uq_service_cycle", columnNames = {"service_code", "cycle_id"})
-    }
+        name = "requests",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uq_service_cycle", columnNames = {"service_code", "cycle_id"})
+        }
 )
 public class WeeklyRequestJpaEntity {
 
@@ -36,7 +37,8 @@ public class WeeklyRequestJpaEntity {
     @OneToMany(mappedBy = "request", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RequestItemJpaEntity> items = new ArrayList<>();
 
-    public WeeklyRequestJpaEntity() {}
+    public WeeklyRequestJpaEntity() {
+    }
 
     public WeeklyRequestJpaEntity(Long id, ServiceCode serviceCode, Long cycleId, String observation, LocalDateTime createdAt, List<RequestItemJpaEntity> items) {
         this.id = id;

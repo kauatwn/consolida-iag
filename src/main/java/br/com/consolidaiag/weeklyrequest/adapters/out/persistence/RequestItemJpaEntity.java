@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(
-    name = "request_items",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "uq_request_product", columnNames = {"request_id", "product_id"})
-    }
+        name = "request_items",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uq_request_product", columnNames = {"request_id", "product_id"})
+        }
 )
 public class RequestItemJpaEntity {
 
@@ -26,7 +26,8 @@ public class RequestItemJpaEntity {
     private WeeklyRequestJpaEntity request;
 
     // Construtor vazio exigido pelo JPA
-    public RequestItemJpaEntity() {}
+    public RequestItemJpaEntity() {
+    }
 
     public RequestItemJpaEntity(Long productId, java.math.BigDecimal quantity) {
         this.productId = productId;

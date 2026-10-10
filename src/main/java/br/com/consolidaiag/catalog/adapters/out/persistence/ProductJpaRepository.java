@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public interface ProductJpaRepository extends JpaRepository<ProductJpaEntity, Long> {
-    
+
     // Método gerado automaticamente pelo Spring para checar a duplicidade
     boolean existsByNameIgnoreCase(String name);
 

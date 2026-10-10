@@ -22,12 +22,12 @@ public class WeeklyRequestPersistenceMapper {
 
         // Amarração bidirecional diretamente no momento da extração
         List<RequestItemJpaEntity> itemEntities = domain.getItems().stream()
-            .map(item -> {
-                RequestItemJpaEntity itemEntity = new RequestItemJpaEntity(item.productId(), item.quantity());
-                itemEntity.setRequest(entity); // Protege o Hibernate de tentar inserir NULL na chave estrangeira
-                return itemEntity;
-            })
-            .toList();
+                .map(item -> {
+                    RequestItemJpaEntity itemEntity = new RequestItemJpaEntity(item.productId(), item.quantity());
+                    itemEntity.setRequest(entity); // Protege o Hibernate de tentar inserir NULL na chave estrangeira
+                    return itemEntity;
+                })
+                .toList();
 
         entity.setItems(itemEntities);
         return entity;
@@ -40,11 +40,11 @@ public class WeeklyRequestPersistenceMapper {
 
         // Usa a Factory de reconstituição, preservando o ID e a data exata do banco
         WeeklyRequest domain = WeeklyRequest.reconstitute(
-            entity.getId(),
-            entity.getServiceCode(),
-            entity.getCycleId(),
-            entity.getObservation(),
-            entity.getCreatedAt()
+                entity.getId(),
+                entity.getServiceCode(),
+                entity.getCycleId(),
+                entity.getObservation(),
+                entity.getCreatedAt()
         );
 
         if (entity.getItems() != null) {

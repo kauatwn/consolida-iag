@@ -21,9 +21,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateProductResponse> createProduct(
-            @Valid @RequestBody CreateProductPayload payload) {
-            
+    public ResponseEntity<CreateProductResponse> createProduct(@Valid @RequestBody CreateProductPayload payload) {
+
         CreateProductResponse response = createProductUseCase.execute(payload);
 
         // Segue a mesma boa prática REST que utilizou no subdomínio anterior

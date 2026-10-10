@@ -22,7 +22,7 @@ public class ProductPersistenceMapper {
         if (entity == null) {
             return null;
         }
-        
+
         // Usa a Factory estática do domínio para reconstituir o objeto sem corrompê-lo
         return Product.reconstitute(
                 entity.getId(),
