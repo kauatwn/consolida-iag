@@ -8,6 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Valida a regra RN-02.1: Apenas produtos ativos do catálogo institucional podem compor uma solicitação.
@@ -24,11 +25,11 @@ public class ActiveProductsOnlyPolicy implements WeeklyRequestPolicy {
 
     @Override
     public void validate(WeeklyRequest request) {
-        if (request == null || request.getItems() == null || request.getItems().isEmpty()) {
+        if (request == null || request.getItems().isEmpty()) {
             return;
         }
 
-        List<Long> requestedProductIds = request.getItems().stream()
+        List<UUID> requestedProductIds = request.getItems().stream()
                 .map(RequestItem::productId)
                 .toList();
 

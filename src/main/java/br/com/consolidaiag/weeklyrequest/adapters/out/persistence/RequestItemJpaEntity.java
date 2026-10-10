@@ -2,6 +2,9 @@ package br.com.consolidaiag.weeklyrequest.adapters.out.persistence;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 @Entity
 @Table(
         name = "request_items",
@@ -12,14 +15,14 @@ import jakarta.persistence.*;
 public class RequestItemJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "product_id", nullable = false)
-    private Long productId;
+    private UUID productId;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private java.math.BigDecimal quantity;
+    private BigDecimal quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id", nullable = false)
@@ -29,32 +32,32 @@ public class RequestItemJpaEntity {
     public RequestItemJpaEntity() {
     }
 
-    public RequestItemJpaEntity(Long productId, java.math.BigDecimal quantity) {
+    public RequestItemJpaEntity(UUID productId, BigDecimal quantity) {
         this.productId = productId;
         this.quantity = quantity;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Long getProductId() {
+    public UUID getProductId() {
         return productId;
     }
 
-    public void setProductId(Long productId) {
+    public void setProductId(UUID productId) {
         this.productId = productId;
     }
 
-    public java.math.BigDecimal getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(java.math.BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 

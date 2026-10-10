@@ -4,11 +4,12 @@ import br.com.consolidaiag.weeklyrequest.domain.ServiceCode;
 import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequest;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface WeeklyRequestRepositoryPort {
-    boolean existsByServiceCodeAndCycleId(ServiceCode code, Long cycleId);
+    boolean existsByServiceCodeAndCycleId(ServiceCode code, UUID cycleId);
 
     WeeklyRequest save(WeeklyRequest request);
 
-    Optional<WeeklyRequest> findById(Long id);
+    Optional<WeeklyRequest> findById(UUID id);
 }

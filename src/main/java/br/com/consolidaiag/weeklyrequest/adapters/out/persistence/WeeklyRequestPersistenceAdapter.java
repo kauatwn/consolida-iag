@@ -6,6 +6,7 @@ import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class WeeklyRequestPersistenceAdapter implements WeeklyRequestRepositoryPort {
@@ -19,7 +20,7 @@ public class WeeklyRequestPersistenceAdapter implements WeeklyRequestRepositoryP
     }
 
     @Override
-    public boolean existsByServiceCodeAndCycleId(ServiceCode serviceCode, Long cycleId) {
+    public boolean existsByServiceCodeAndCycleId(ServiceCode serviceCode, UUID cycleId) {
         return jpaRepository.existsByServiceCodeAndCycleId(serviceCode, cycleId);
     }
 
@@ -31,7 +32,7 @@ public class WeeklyRequestPersistenceAdapter implements WeeklyRequestRepositoryP
     }
 
     @Override
-    public Optional<WeeklyRequest> findById(Long id) {
+    public Optional<WeeklyRequest> findById(UUID id) {
         return jpaRepository.findById(id).map(mapper::toDomain);
     }
 }

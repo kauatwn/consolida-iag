@@ -1,18 +1,19 @@
 package br.com.consolidaiag.weeklyrequest.application.service;
 
-import br.com.consolidaiag.weeklyrequest.application.dtos.request.ItemPayload;
 import br.com.consolidaiag.weeklyrequest.application.dtos.request.SubmitWeeklyRequestPayload;
 import br.com.consolidaiag.weeklyrequest.application.dtos.response.SubmitWeeklyRequestResponse;
 import br.com.consolidaiag.weeklyrequest.application.policies.WeeklyRequestPolicy;
 import br.com.consolidaiag.weeklyrequest.application.ports.in.SubmitWeeklyRequestUseCase;
 import br.com.consolidaiag.weeklyrequest.application.ports.out.ActiveCyclePort;
 import br.com.consolidaiag.weeklyrequest.application.ports.out.WeeklyRequestRepositoryPort;
+import br.com.consolidaiag.weeklyrequest.domain.RequestItem;
 import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequest;
 import br.com.consolidaiag.weeklyrequest.domain.exceptions.ActiveCycleNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SubmitWeeklyRequestService implements SubmitWeeklyRequestUseCase {
@@ -39,28 +40,29 @@ public class SubmitWeeklyRequestService implements SubmitWeeklyRequestUseCase {
         }
 
         // RN-02.5: Resolução do ciclo semanal ativo
-        Long activeCycleId = cyclePort.getActiveCycleId()
+        UUID activeCycleId = cyclePort.getActiveCycleId()
                 .orElseThrow(ActiveCycleNotFoundException::new);
+
+        // Mapeia os itens do payload para a entidade de domínio
+        List<RequestItem> items = payload.items().stream()
+                .map(item -> new RequestItem(item.productId(), item.quantity()))
+                .toList();
 
         // Criação da entidade de domínio
         WeeklyRequest request = WeeklyRequest.create(
                 payload.serviceCode(),
                 activeCycleId,
-                payload.observation()
+                payload.observation(),
+                items
         );
 
-        // Adiciona os itens (validações de quantidade > 0 e unicidade interna ocorrem no domínio - RN-02.2)
-        for (ItemPayload item : payload.items()) {
-            request.addItem(item.productId(), item.quantity());
-        }
-
-        // Executa todas as políticas de validação registradas (Specification Pattern)
+        // Executa todas as políticas de validação registradas (Validation Policies)
         policies.forEach(policy -> policy.validate(request));
 
         WeeklyRequest saved = repository.save(request);
 
         return new SubmitWeeklyRequestResponse(
-                saved.getId(),
+                saved.getId().value(),
                 saved.getServiceCode(),
                 saved.getCycleId(),
                 saved.getCreatedAt()

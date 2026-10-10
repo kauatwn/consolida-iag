@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(
@@ -17,15 +18,14 @@ import java.util.List;
 public class WeeklyRequestJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "service_code", nullable = false)
     private ServiceCode serviceCode;
 
     @Column(name = "cycle_id", nullable = false)
-    private Long cycleId;
+    private UUID cycleId;
 
     @Column(name = "observation")
     private String observation;
@@ -40,7 +40,7 @@ public class WeeklyRequestJpaEntity {
     public WeeklyRequestJpaEntity() {
     }
 
-    public WeeklyRequestJpaEntity(Long id, ServiceCode serviceCode, Long cycleId, String observation, LocalDateTime createdAt, List<RequestItemJpaEntity> items) {
+    public WeeklyRequestJpaEntity(UUID id, ServiceCode serviceCode, UUID cycleId, String observation, LocalDateTime createdAt, List<RequestItemJpaEntity> items) {
         this.id = id;
         this.serviceCode = serviceCode;
         this.cycleId = cycleId;
@@ -49,11 +49,11 @@ public class WeeklyRequestJpaEntity {
         this.items = items != null ? items : new ArrayList<>();
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -65,11 +65,11 @@ public class WeeklyRequestJpaEntity {
         this.serviceCode = serviceCode;
     }
 
-    public Long getCycleId() {
+    public UUID getCycleId() {
         return cycleId;
     }
 
-    public void setCycleId(Long cycleId) {
+    public void setCycleId(UUID cycleId) {
         this.cycleId = cycleId;
     }
 
