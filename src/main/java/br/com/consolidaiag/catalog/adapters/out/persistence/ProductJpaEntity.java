@@ -33,15 +33,35 @@ public class ProductJpaEntity {
     }
 
     // Getters e Setters anêmicos liberados (são para uso exclusivo do Framework/Mapper)
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public UnitMeasure getUnitMeasure() { return unitMeasure; }
-    public void setUnitMeasure(UnitMeasure unitMeasure) { this.unitMeasure = unitMeasure; }
+    public String getName() {
+        return name;
+    }
 
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public UnitMeasure getUnitMeasure() {
+        return unitMeasure;
+    }
+
+    public void setUnitMeasure(UnitMeasure unitMeasure) {
+        this.unitMeasure = unitMeasure;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

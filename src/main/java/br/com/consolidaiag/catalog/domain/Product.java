@@ -11,11 +11,11 @@ public class Product {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("O nome do produto é obrigatório.");
         }
-        
+
         if (unitMeasure == null) {
             throw new IllegalArgumentException("A unidade de medida é obrigatória.");
         }
-        
+
         this.id = id;
         this.name = name.trim();
         this.unitMeasure = unitMeasure;
@@ -45,7 +45,7 @@ public class Product {
         if (this.active) {
             throw new IllegalStateException("O produto já está ativo.");
         }
-        
+
         this.active = true;
     }
 
@@ -63,8 +63,19 @@ public class Product {
     }
 
     // Apenas Getters
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public UnitMeasure getUnitMeasure() { return unitMeasure; }
-    public boolean isActive() { return active; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public UnitMeasure getUnitMeasure() {
+        return unitMeasure;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
 }

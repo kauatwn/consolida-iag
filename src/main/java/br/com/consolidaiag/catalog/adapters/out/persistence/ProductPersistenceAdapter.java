@@ -21,10 +21,10 @@ public class ProductPersistenceAdapter implements ProductRepositoryPort {
     public Product save(Product product) {
         // 1. Traduz do Domínio para o JPA
         ProductJpaEntity entity = mapper.toJpaEntity(product);
-        
+
         // 2. Salva no banco de dados usando o Spring Data
         ProductJpaEntity savedEntity = jpaRepository.save(entity);
-        
+
         // 3. Traduz de volta para o Domínio puro
         return mapper.toDomain(savedEntity);
     }
@@ -40,7 +40,7 @@ public class ProductPersistenceAdapter implements ProductRepositoryPort {
         if (productIds == null || productIds.isEmpty()) {
             return 0;
         }
-        
+
         return jpaRepository.countByIdInAndActiveTrue(productIds);
     }
 }

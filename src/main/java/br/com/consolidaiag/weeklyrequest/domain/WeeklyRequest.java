@@ -46,8 +46,8 @@ public class WeeklyRequest {
 
         // Enforce uniqueness constraint (uq_solicitacao_produto)
         boolean alreadyExists = this.items.stream()
-            .anyMatch(item -> item.productId().equals(productId));
-        
+                .anyMatch(item -> item.productId().equals(productId));
+
         if (alreadyExists) {
             throw new IllegalArgumentException("Product with ID " + productId + " already added to this request.");
         }
