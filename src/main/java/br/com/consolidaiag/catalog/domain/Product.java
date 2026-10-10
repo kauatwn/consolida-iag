@@ -1,13 +1,13 @@
 package br.com.consolidaiag.catalog.domain;
 
 public class Product {
-    private final Long id;
+    private final ProductId id;
     private String name;
     private UnitMeasure unitMeasure;
     private boolean active;
 
     // Construtor privado para blindar a entidade
-    private Product(Long id, String name, UnitMeasure unitMeasure, boolean active) {
+    private Product(ProductId id, String name, UnitMeasure unitMeasure, boolean active) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("O nome do produto é obrigatório.");
         }
@@ -24,11 +24,11 @@ public class Product {
 
     // Factory 1: Para a criação de um NOVO produto pelo sistema (nasce ativo por padrão)
     public static Product create(String name, UnitMeasure unitMeasure) {
-        return new Product(null, name, unitMeasure, true);
+        return new Product(ProductId.generate(), name, unitMeasure, true);
     }
 
     // Factory 2: Para o JPA reconstituir o objeto vindo do banco de dados
-    public static Product reconstitute(Long id, String name, UnitMeasure unitMeasure, boolean active) {
+    public static Product reconstitute(ProductId id, String name, UnitMeasure unitMeasure, boolean active) {
         return new Product(id, name, unitMeasure, active);
     }
 
@@ -62,8 +62,7 @@ public class Product {
         this.unitMeasure = newMeasure;
     }
 
-    // Apenas Getters
-    public Long getId() {
+    public ProductId getId() {
         return id;
     }
 
