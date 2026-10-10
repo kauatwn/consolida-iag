@@ -2,15 +2,16 @@ package br.com.consolidaiag.weeklyrequest.domain.exceptions;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Lançada quando um pedido referencia produtos inativos ou inexistentes no catálogo (RN-02.1).
  */
 public class InactiveProductSelectionException extends RuntimeException {
 
-    private final List<Long> productIds;
+    private final List<UUID> productIds;
 
-    public InactiveProductSelectionException(List<Long> productIds) {
+    public InactiveProductSelectionException(List<UUID> productIds) {
         super(String.format("One or more selected products are inactive or do not exist in the catalog: %s (RN-02.1).", productIds));
         this.productIds = productIds != null ? List.copyOf(productIds) : Collections.emptyList();
     }
@@ -20,7 +21,7 @@ public class InactiveProductSelectionException extends RuntimeException {
         this.productIds = Collections.emptyList();
     }
 
-    public List<Long> getProductIds() {
+    public List<UUID> getProductIds() {
         return productIds;
     }
 }
