@@ -1,6 +1,7 @@
 package br.com.consolidaiag.catalog.adapters.out.persistence;
 
 import br.com.consolidaiag.catalog.domain.Product;
+import br.com.consolidaiag.catalog.domain.ProductId;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,7 +12,7 @@ public class ProductPersistenceMapper {
             return null;
         }
         return new ProductJpaEntity(
-                domain.getId(),
+                domain.getId().value(),
                 domain.getName(),
                 domain.getUnitMeasure(),
                 domain.isActive()
@@ -25,7 +26,7 @@ public class ProductPersistenceMapper {
 
         // Usa a Factory estática do domínio para reconstituir o objeto sem corrompê-lo
         return Product.reconstitute(
-                entity.getId(),
+                new ProductId(entity.getId()),
                 entity.getName(),
                 entity.getUnitMeasure(),
                 entity.isActive()

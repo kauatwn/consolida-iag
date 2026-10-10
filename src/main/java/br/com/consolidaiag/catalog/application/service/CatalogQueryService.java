@@ -5,6 +5,7 @@ import br.com.consolidaiag.catalog.application.ports.out.ProductRepositoryPort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CatalogQueryService implements CatalogQueryPort {
@@ -16,13 +17,13 @@ public class CatalogQueryService implements CatalogQueryPort {
     }
 
     @Override
-    public boolean verifyProductsStatus(List<Long> productIds) {
+    public boolean verifyProductsStatus(List<UUID> productIds) {
         if (productIds == null || productIds.isEmpty()) {
             return true;
         }
 
         // Remove duplicados da lista (programação defensiva)
-        List<Long> uniqueIds = productIds.stream().distinct().toList();
+        List<UUID> uniqueIds = productIds.stream().distinct().toList();
 
         // Consulta a base de dados real
         long activeCount = productRepositoryPort.countActiveProductsByIds(uniqueIds);

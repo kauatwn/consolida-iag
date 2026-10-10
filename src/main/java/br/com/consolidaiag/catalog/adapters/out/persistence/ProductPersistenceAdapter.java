@@ -5,6 +5,7 @@ import br.com.consolidaiag.catalog.domain.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class ProductPersistenceAdapter implements ProductRepositoryPort {
@@ -36,7 +37,7 @@ public class ProductPersistenceAdapter implements ProductRepositoryPort {
     }
 
     @Override
-    public long countActiveProductsByIds(List<Long> productIds) {
+    public long countActiveProductsByIds(List<UUID> productIds) {
         if (productIds == null || productIds.isEmpty()) {
             return 0;
         }

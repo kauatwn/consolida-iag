@@ -3,13 +3,14 @@ package br.com.consolidaiag.catalog.adapters.out.persistence;
 import br.com.consolidaiag.catalog.domain.UnitMeasure;
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "products")
 public class ProductJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -25,7 +26,7 @@ public class ProductJpaEntity {
     public ProductJpaEntity() {
     }
 
-    public ProductJpaEntity(Long id, String name, UnitMeasure unitMeasure, boolean active) {
+    public ProductJpaEntity(UUID id, String name, UnitMeasure unitMeasure, boolean active) {
         this.id = id;
         this.name = name;
         this.unitMeasure = unitMeasure;
@@ -33,11 +34,11 @@ public class ProductJpaEntity {
     }
 
     // Getters e Setters anêmicos liberados (são para uso exclusivo do Framework/Mapper)
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

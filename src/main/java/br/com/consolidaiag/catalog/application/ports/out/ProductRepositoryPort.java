@@ -3,6 +3,7 @@ package br.com.consolidaiag.catalog.application.ports.out;
 import br.com.consolidaiag.catalog.domain.Product;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ProductRepositoryPort {
     Product save(Product product);
@@ -11,5 +12,5 @@ public interface ProductRepositoryPort {
     boolean existsByName(String name);
 
     // Conta quantos produtos da lista estão ativos na base de dados
-    long countActiveProductsByIds(List<Long> productIds);
+    long countActiveProductsByIds(List<UUID> productIds);
 }
