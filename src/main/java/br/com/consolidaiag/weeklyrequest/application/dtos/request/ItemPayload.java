@@ -4,13 +4,14 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public record ItemPayload(
         @NotNull(message = "O ID do produto é obrigatório")
-        Long productId,
+        UUID productId,
 
         @NotNull(message = "A quantidade é obrigatória")
-        @DecimalMin(value = "0.01", message = "A quantidade deve ser maior que zero")
+        @DecimalMin(value = "1.0", message = "A quantidade deve ser maior que zero")
         BigDecimal quantity
 ) {
 }

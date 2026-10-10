@@ -1,9 +1,12 @@
 package br.com.consolidaiag.weeklyrequest.adapters.out.persistence;
 
+import br.com.consolidaiag.weeklyrequest.domain.RequestItem;
 import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequest;
+import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequestId;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class WeeklyRequestPersistenceMapper {
@@ -14,7 +17,7 @@ public class WeeklyRequestPersistenceMapper {
         }
 
         WeeklyRequestJpaEntity entity = new WeeklyRequestJpaEntity();
-        entity.setId(domain.getId());
+        entity.setId(domain.getId().value());
         entity.setServiceCode(domain.getServiceCode());
         entity.setCycleId(domain.getCycleId());
         entity.setObservation(domain.getObservation());
@@ -38,21 +41,19 @@ public class WeeklyRequestPersistenceMapper {
             return null;
         }
 
-        // Usa a Factory de reconstituição, preservando o ID e a data exata do banco
-        WeeklyRequest domain = WeeklyRequest.reconstitute(
-                entity.getId(),
+        List<RequestItem> items = Optional.ofNullable(entity.getItems())
+                .orElseGet(List::of)
+                .stream()
+                .map(item -> new RequestItem(item.getProductId(), item.getQuantity()))
+                .toList();
+
+        return WeeklyRequest.reconstitute(
+                new WeeklyRequestId(entity.getId()),
                 entity.getServiceCode(),
                 entity.getCycleId(),
                 entity.getObservation(),
-                entity.getCreatedAt()
+                entity.getCreatedAt(),
+                items
         );
-
-        if (entity.getItems() != null) {
-            for (RequestItemJpaEntity itemEntity : entity.getItems()) {
-                domain.addItem(itemEntity.getProductId(), itemEntity.getQuantity());
-            }
-        }
-
-        return domain;
     }
 }
