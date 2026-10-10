@@ -2,16 +2,18 @@ package br.com.consolidaiag.weeklyrequest.domain.exceptions;
 
 import br.com.consolidaiag.weeklyrequest.domain.ServiceCode;
 
+import java.util.UUID;
+
 /**
  * Lançada quando um serviço tenta submeter mais de uma solicitação no mesmo ciclo semanal (RN-02.4).
  */
 public class DuplicateRequestForCycleException extends RuntimeException {
 
     private final ServiceCode serviceCode;
-    private final Long cycleId;
+    private final UUID cycleId;
 
-    public DuplicateRequestForCycleException(ServiceCode serviceCode, Long cycleId) {
-        super(String.format("Service '%s' has already submitted a request for cycle %d (RN-02.4).", serviceCode, cycleId));
+    public DuplicateRequestForCycleException(ServiceCode serviceCode, UUID cycleId) {
+        super(String.format("Service '%s' has already submitted a request for cycle %s (RN-02.4).", serviceCode, cycleId));
         this.serviceCode = serviceCode;
         this.cycleId = cycleId;
     }
@@ -26,7 +28,7 @@ public class DuplicateRequestForCycleException extends RuntimeException {
         return serviceCode;
     }
 
-    public Long getCycleId() {
+    public UUID getCycleId() {
         return cycleId;
     }
 }
