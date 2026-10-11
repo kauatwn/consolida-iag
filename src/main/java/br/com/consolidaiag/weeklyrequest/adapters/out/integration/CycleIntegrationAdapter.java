@@ -1,13 +1,13 @@
 package br.com.consolidaiag.weeklyrequest.adapters.out.integration;
 
-import br.com.consolidaiag.weeklyrequest.application.ports.out.ActiveCyclePort;
+import br.com.consolidaiag.weeklyrequest.application.ports.out.FetchActiveCyclePort;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class CycleIntegrationAdapter implements ActiveCyclePort {
+public class CycleIntegrationAdapter implements FetchActiveCyclePort {
 
     @Override
     public Optional<UUID> getActiveCycleId() {

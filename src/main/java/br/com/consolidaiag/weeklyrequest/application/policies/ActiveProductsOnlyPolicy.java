@@ -1,6 +1,6 @@
 package br.com.consolidaiag.weeklyrequest.application.policies;
 
-import br.com.consolidaiag.weeklyrequest.application.ports.out.ProductCatalogPort;
+import br.com.consolidaiag.weeklyrequest.application.ports.out.CheckActiveProductsPort;
 import br.com.consolidaiag.weeklyrequest.domain.RequestItem;
 import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequest;
 import br.com.consolidaiag.weeklyrequest.domain.exceptions.InactiveProductSelectionException;
@@ -17,10 +17,10 @@ import java.util.UUID;
 @Order(2)
 public class ActiveProductsOnlyPolicy implements WeeklyRequestPolicy {
 
-    private final ProductCatalogPort catalogPort;
+    private final CheckActiveProductsPort checkActiveProductsPort;
 
-    public ActiveProductsOnlyPolicy(ProductCatalogPort catalogPort) {
-        this.catalogPort = catalogPort;
+    public ActiveProductsOnlyPolicy(CheckActiveProductsPort checkActiveProductsPort) {
+        this.checkActiveProductsPort = checkActiveProductsPort;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class ActiveProductsOnlyPolicy implements WeeklyRequestPolicy {
                 .map(RequestItem::productId)
                 .toList();
 
-        if (!catalogPort.areAllProductsActive(requestedProductIds)) {
+        if (!checkActiveProductsPort.areAllProductsActive(requestedProductIds)) {
             throw new InactiveProductSelectionException(requestedProductIds);
         }
     }
