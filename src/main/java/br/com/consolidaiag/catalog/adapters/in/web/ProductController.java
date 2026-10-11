@@ -1,8 +1,8 @@
 package br.com.consolidaiag.catalog.adapters.in.web;
 
-import br.com.consolidaiag.catalog.application.dtos.request.CreateProductPayload;
-import br.com.consolidaiag.catalog.application.dtos.response.CreateProductResponse;
-import br.com.consolidaiag.catalog.application.ports.in.CreateProductUseCase;
+import br.com.consolidaiag.catalog.application.dtos.request.RegisterProductPayload;
+import br.com.consolidaiag.catalog.application.dtos.response.RegisterProductResponse;
+import br.com.consolidaiag.catalog.application.ports.in.RegisterProductUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,18 +14,17 @@ import java.net.URI;
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
-    private final CreateProductUseCase createProductUseCase;
+    private final RegisterProductUseCase registerProductUseCase;
 
-    public ProductController(CreateProductUseCase createProductUseCase) {
-        this.createProductUseCase = createProductUseCase;
+    public ProductController(RegisterProductUseCase registerProductUseCase) {
+        this.registerProductUseCase = registerProductUseCase;
     }
 
     @PostMapping
-    public ResponseEntity<CreateProductResponse> createProduct(@Valid @RequestBody CreateProductPayload payload) {
+    public ResponseEntity<RegisterProductResponse> createProduct(@Valid @RequestBody RegisterProductPayload payload) {
 
-        CreateProductResponse response = createProductUseCase.execute(payload);
+        RegisterProductResponse response = registerProductUseCase.execute(payload);
 
-        // Segue a mesma boa prática REST que utilizou no subdomínio anterior
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
