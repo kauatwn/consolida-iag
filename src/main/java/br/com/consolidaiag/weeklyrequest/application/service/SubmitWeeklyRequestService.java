@@ -4,7 +4,7 @@ import br.com.consolidaiag.weeklyrequest.application.dtos.request.SubmitWeeklyRe
 import br.com.consolidaiag.weeklyrequest.application.dtos.response.SubmitWeeklyRequestResponse;
 import br.com.consolidaiag.weeklyrequest.application.policies.WeeklyRequestPolicy;
 import br.com.consolidaiag.weeklyrequest.application.ports.in.SubmitWeeklyRequestUseCase;
-import br.com.consolidaiag.weeklyrequest.application.ports.out.ActiveCyclePort;
+import br.com.consolidaiag.weeklyrequest.application.ports.out.FetchActiveCyclePort;
 import br.com.consolidaiag.weeklyrequest.application.ports.out.WeeklyRequestRepositoryPort;
 import br.com.consolidaiag.weeklyrequest.domain.RequestItem;
 import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequest;
@@ -18,16 +18,13 @@ import java.util.UUID;
 @Service
 public class SubmitWeeklyRequestService implements SubmitWeeklyRequestUseCase {
 
-    private final ActiveCyclePort cyclePort;
+    private final FetchActiveCyclePort fetchActiveCyclePort;
     private final WeeklyRequestRepositoryPort repository;
     private final List<WeeklyRequestPolicy> policies;
 
-    public SubmitWeeklyRequestService(
-            ActiveCyclePort cyclePort,
-            WeeklyRequestRepositoryPort repository,
-            List<WeeklyRequestPolicy> policies
-    ) {
-        this.cyclePort = cyclePort;
+    public SubmitWeeklyRequestService(FetchActiveCyclePort fetchActiveCyclePort, WeeklyRequestRepositoryPort repository,
+                                      List<WeeklyRequestPolicy> policies) {
+        this.fetchActiveCyclePort = fetchActiveCyclePort;
         this.repository = repository;
         this.policies = policies != null ? List.copyOf(policies) : List.of();
     }
@@ -40,7 +37,7 @@ public class SubmitWeeklyRequestService implements SubmitWeeklyRequestUseCase {
         }
 
         // RN-02.5: Resolução do ciclo semanal ativo
-        UUID activeCycleId = cyclePort.getActiveCycleId()
+        UUID activeCycleId = fetchActiveCyclePort.getActiveCycleId()
                 .orElseThrow(ActiveCycleNotFoundException::new);
 
         // Mapeia os itens do payload para a entidade de domínio
