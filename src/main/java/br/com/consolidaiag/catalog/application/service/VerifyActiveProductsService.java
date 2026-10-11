@@ -1,6 +1,6 @@
 package br.com.consolidaiag.catalog.application.service;
 
-import br.com.consolidaiag.catalog.application.ports.in.CatalogQueryPort;
+import br.com.consolidaiag.catalog.application.ports.in.VerifyActiveProductsUseCase;
 import br.com.consolidaiag.catalog.application.ports.out.ProductRepositoryPort;
 import org.springframework.stereotype.Service;
 
@@ -8,16 +8,16 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class CatalogQueryService implements CatalogQueryPort {
+public class VerifyActiveProductsService implements VerifyActiveProductsUseCase {
 
     private final ProductRepositoryPort productRepositoryPort;
 
-    public CatalogQueryService(ProductRepositoryPort productRepositoryPort) {
+    public VerifyActiveProductsService(ProductRepositoryPort productRepositoryPort) {
         this.productRepositoryPort = productRepositoryPort;
     }
 
     @Override
-    public boolean verifyProductsStatus(List<UUID> productIds) {
+    public boolean execute(List<UUID> productIds) {
         if (productIds == null || productIds.isEmpty()) {
             return true;
         }

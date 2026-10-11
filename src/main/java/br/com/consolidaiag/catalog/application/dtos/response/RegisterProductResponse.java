@@ -4,7 +4,7 @@ import br.com.consolidaiag.catalog.domain.UnitMeasure;
 
 import java.util.UUID;
 
-public record CreateProductResponse(
+public record RegisterProductResponse(
         UUID id,
         String name,
         UnitMeasure unitMeasure,

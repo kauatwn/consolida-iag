@@ -1,6 +1,6 @@
 package br.com.consolidaiag.catalog.domain;
 
-public class Product {
+public final class Product {
     private final ProductId id;
     private String name;
     private UnitMeasure unitMeasure;
