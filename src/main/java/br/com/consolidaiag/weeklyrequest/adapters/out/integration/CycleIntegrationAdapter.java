@@ -1,5 +1,6 @@
 package br.com.consolidaiag.weeklyrequest.adapters.out.integration;
 
+import br.com.consolidaiag.cycle.application.ports.in.FetchActiveCycleUseCase;
 import br.com.consolidaiag.weeklyrequest.application.ports.out.FetchActiveCyclePort;
 import org.springframework.stereotype.Component;
 
@@ -9,13 +10,14 @@ import java.util.UUID;
 @Component
 public class CycleIntegrationAdapter implements FetchActiveCyclePort {
 
+    private final FetchActiveCycleUseCase fetchActiveCycleUseCase;
+
+    public CycleIntegrationAdapter(FetchActiveCycleUseCase fetchActiveCycleUseCase) {
+        this.fetchActiveCycleUseCase = fetchActiveCycleUseCase;
+    }
+
     @Override
     public Optional<UUID> getActiveCycleId() {
-        /*
-         * TODO: IMPLEMENTAÇÃO MOCKADA TEMPORÁRIA.
-         * Finge que existe um ciclo semanal aberto com UUID fixo.
-         * Futuramente, isso chamará o subdomínio 'cycle'.
-         */
-        return Optional.of(UUID.fromString("00000000-0000-0000-0000-000000000001"));
+        return fetchActiveCycleUseCase.execute();
     }
 }
