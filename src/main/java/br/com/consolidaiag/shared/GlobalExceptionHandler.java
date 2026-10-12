@@ -1,5 +1,7 @@
 package br.com.consolidaiag.shared;
 
+import br.com.consolidaiag.catalog.domain.exception.InvalidProductDataException;
+import br.com.consolidaiag.catalog.domain.exception.InvalidProductStateException;
 import br.com.consolidaiag.catalog.domain.exception.ProductAlreadyExistsException;
 import br.com.consolidaiag.catalog.domain.exception.ProductNotFoundException;
 import br.com.consolidaiag.cycle.domain.exceptions.ActiveCycleAlreadyExistsException;
@@ -10,6 +12,8 @@ import br.com.consolidaiag.weeklyrequest.domain.exceptions.ClosedCycleImmutableE
 import br.com.consolidaiag.weeklyrequest.domain.exceptions.DuplicateRequestForCycleException;
 import br.com.consolidaiag.weeklyrequest.domain.exceptions.InactiveProductSelectionException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +24,8 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ProductAlreadyExistsException.class)
     public ResponseEntity<ApiErrorResponse> handleProductAlreadyExistsException(ProductAlreadyExistsException ex, HttpServletRequest request) {
@@ -66,6 +72,16 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(InvalidProductStateException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidProductStateException(InvalidProductStateException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(InvalidProductDataException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidProductDataException(InvalidProductDataException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
@@ -77,6 +93,12 @@ public class GlobalExceptionHandler {
 
         String message = "Validation failed: " + errors;
         return buildResponse(HttpStatus.BAD_REQUEST, message, request);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> handleUnexpectedException(Exception ex, HttpServletRequest request) {
+        log.error("Unhandled exception at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred.", request);
     }
 
     private ResponseEntity<ApiErrorResponse> buildResponse(HttpStatus status, String message, HttpServletRequest request) {
