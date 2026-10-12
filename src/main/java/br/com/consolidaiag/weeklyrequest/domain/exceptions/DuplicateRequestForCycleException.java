@@ -1,5 +1,6 @@
 package br.com.consolidaiag.weeklyrequest.domain.exceptions;
 
+import br.com.consolidaiag.shared.DomainException;
 import br.com.consolidaiag.weeklyrequest.domain.ServiceCode;
 
 import java.util.UUID;
@@ -7,7 +8,7 @@ import java.util.UUID;
 /**
  * Lançada quando um serviço tenta submeter mais de uma solicitação no mesmo ciclo semanal (RN-02.4).
  */
-public class DuplicateRequestForCycleException extends RuntimeException {
+public final class DuplicateRequestForCycleException extends DomainException {
 
     private final ServiceCode serviceCode;
     private final UUID cycleId;

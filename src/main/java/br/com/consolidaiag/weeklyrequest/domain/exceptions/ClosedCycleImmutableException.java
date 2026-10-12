@@ -1,9 +1,11 @@
 package br.com.consolidaiag.weeklyrequest.domain.exceptions;
 
+import br.com.consolidaiag.shared.DomainException;
+
 /**
  * Lançada quando há tentativa de submeter, alterar ou remover solicitações em um ciclo já fechado (RN-02.5).
  */
-public class ClosedCycleImmutableException extends RuntimeException {
+public final class ClosedCycleImmutableException extends DomainException {
 
     private final Long cycleId;
 

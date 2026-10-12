@@ -1,5 +1,7 @@
 package br.com.consolidaiag.weeklyrequest.domain.exceptions;
 
+import br.com.consolidaiag.shared.DomainException;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -7,7 +9,7 @@ import java.util.UUID;
 /**
  * Lançada quando um pedido referencia produtos inativos ou inexistentes no catálogo (RN-02.1).
  */
-public class InactiveProductSelectionException extends RuntimeException {
+public final class InactiveProductSelectionException extends DomainException {
 
     private final List<UUID> productIds;
 
