@@ -1,6 +1,8 @@
 package br.com.consolidaiag.cycle.domain.exceptions;
 
-public final class CycleAlreadyClosedException extends RuntimeException {
+import br.com.consolidaiag.shared.DomainException;
+
+public final class CycleAlreadyClosedException extends DomainException {
 
     public CycleAlreadyClosedException() {
         super("This cycle is already closed.");
