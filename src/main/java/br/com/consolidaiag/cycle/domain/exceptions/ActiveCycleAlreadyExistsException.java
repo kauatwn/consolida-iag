@@ -1,6 +1,8 @@
 package br.com.consolidaiag.cycle.domain.exceptions;
 
-public class ActiveCycleAlreadyExistsException extends RuntimeException {
+import br.com.consolidaiag.shared.DomainException;
+
+public final class ActiveCycleAlreadyExistsException extends DomainException {
 
     public ActiveCycleAlreadyExistsException() {
         super("Cannot open a new purchasing cycle while another cycle is still open (RN-01).");
