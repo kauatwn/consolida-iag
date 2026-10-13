@@ -5,6 +5,7 @@ import br.com.consolidaiag.weeklyrequest.domain.ServiceCode;
 import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,14 +26,32 @@ public class WeeklyRequestPersistenceAdapter implements WeeklyRequestRepositoryP
     }
 
     @Override
-    public WeeklyRequest save(WeeklyRequest weeklyRequest) {
-        WeeklyRequestJpaEntity jpaEntity = mapper.toJpaEntity(weeklyRequest);
-        WeeklyRequestJpaEntity savedJpaEntity = jpaRepository.save(jpaEntity);
-        return mapper.toDomain(savedJpaEntity);
+    public WeeklyRequest save(WeeklyRequest request) {
+        WeeklyRequestJpaEntity entity = jpaRepository.findById(request.getId().value())
+                .map(existing -> {
+                    mapper.updateJpaEntity(request, existing);
+
+                    return existing;
+                })
+                .orElseGet(() -> mapper.toJpaEntity(request));
+
+        return mapper.toDomain(jpaRepository.save(entity));
     }
 
     @Override
     public Optional<WeeklyRequest> findById(UUID id) {
         return jpaRepository.findById(id).map(mapper::toDomain);
+    }
+
+    @Override
+    public Optional<WeeklyRequest> findByServiceCodeAndCycleId(ServiceCode serviceCode, UUID cycleId) {
+        return jpaRepository.findByServiceCodeAndCycleId(serviceCode, cycleId).map(mapper::toDomain);
+    }
+
+    @Override
+    public List<WeeklyRequest> findAllByCycleId(UUID cycleId) {
+        return jpaRepository.findAllByCycleId(cycleId).stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }
