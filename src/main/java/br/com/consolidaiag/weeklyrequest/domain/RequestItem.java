@@ -1,5 +1,7 @@
 package br.com.consolidaiag.weeklyrequest.domain;
 
+import br.com.consolidaiag.weeklyrequest.domain.exceptions.InvalidQuantityException;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,7 +17,7 @@ public record RequestItem(
 
         // Enforcing RN-02.2 inside the domain
         if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Quantity must be greater than zero.");
+            throw new InvalidQuantityException(quantity);
         }
     }
 }
