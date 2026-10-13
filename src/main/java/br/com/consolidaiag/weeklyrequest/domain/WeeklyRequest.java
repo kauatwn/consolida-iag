@@ -1,5 +1,8 @@
 package br.com.consolidaiag.weeklyrequest.domain;
 
+import br.com.consolidaiag.weeklyrequest.domain.exceptions.DuplicateRequestItemException;
+import br.com.consolidaiag.weeklyrequest.domain.exceptions.EmptyRequestItemsException;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -9,7 +12,7 @@ public final class WeeklyRequest {
     private final WeeklyRequestId id;
     private final ServiceCode serviceCode;
     private final UUID cycleId;
-    private final String observation;
+    private String observation;
     private final List<RequestItem> items;
     private final LocalDateTime createdAt;
 
@@ -24,7 +27,7 @@ public final class WeeklyRequest {
         Objects.requireNonNull(items, "Items list cannot be null.");
 
         if (items.isEmpty()) {
-            throw new IllegalArgumentException("A weekly request must contain at least one item (RN-02.2).");
+            throw new EmptyRequestItemsException();
         }
 
         // Popula os itens garantindo quantity > 0 e sem duplicidade
@@ -47,10 +50,23 @@ public final class WeeklyRequest {
                 .anyMatch(item -> item.productId().equals(productId));
 
         if (alreadyExists) {
-            throw new IllegalArgumentException("Product with ID " + productId + " already added to this request.");
+            throw new DuplicateRequestItemException(productId);
         }
 
         this.items.add(new RequestItem(productId, quantity));
+    }
+
+    public void update(String observation, List<RequestItem> items) {
+        this.observation = observation;
+        Objects.requireNonNull(items, "New items list cannot be null.");
+
+        if (items.isEmpty()) {
+            throw new EmptyRequestItemsException();
+        }
+
+        this.items.clear();
+
+        items.forEach(item -> this.addItem(item.productId(), item.quantity()));
     }
 
     public WeeklyRequestId getId() {
