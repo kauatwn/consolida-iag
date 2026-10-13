@@ -40,4 +40,22 @@ public interface WeeklyCycleApi {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
     })
     ResponseEntity<WeeklyCycleResponse> closeCycle(@PathVariable UUID id);
+
+    @Operation(
+            summary = "Consultar ciclo ativo",
+            description = "Consulta os detalhes do ciclo de compras atualmente aberto. Utilizado pela interface das cozinhas e pela validação de pedidos para verificar a janela de compras liberada."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ciclo ativo retornado com sucesso",
+                    content = @Content(schema = @Schema(implementation = WeeklyCycleResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Não há ciclo aberto no momento",
+                    content = @Content
+            )
+    })
+    ResponseEntity<WeeklyCycleResponse> consultActiveCycle();
 }
