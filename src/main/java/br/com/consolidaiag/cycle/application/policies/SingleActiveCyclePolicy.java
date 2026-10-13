@@ -6,9 +6,13 @@ import br.com.consolidaiag.cycle.domain.exceptions.ActiveCycleAlreadyExistsExcep
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+/**
+ * Valida a regra RN-01: Apenas um ciclo pode estar aberto por vez.
+ * Esta política impede a criação de janelas de compras sobrepostas.
+ */
 @Component
 @Order(1)
-public class SingleActiveCyclePolicy implements OpenCyclePolicy {
+public class SingleActiveCyclePolicy implements OpenWeeklyCyclePolicy {
 
     private final WeeklyCycleRepositoryPort repository;
 
