@@ -4,8 +4,9 @@ import br.com.consolidaiag.catalog.application.dtos.request.ActivateProductPaylo
 import br.com.consolidaiag.catalog.application.ports.in.ActivateProductUseCase;
 import br.com.consolidaiag.catalog.application.ports.out.ProductRepositoryPort;
 import br.com.consolidaiag.catalog.domain.Product;
-import br.com.consolidaiag.catalog.domain.exception.ProductNotFoundException;
+import br.com.consolidaiag.catalog.domain.exceptions.ProductNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ActivateProductService implements ActivateProductUseCase {
@@ -17,10 +18,11 @@ public class ActivateProductService implements ActivateProductUseCase {
     }
 
     @Override
+    @Transactional
     public void execute(ActivateProductPayload payload) {
 
         Product product = productRepositoryPort.findById(payload.productId())
-                .orElseThrow(() -> new ProductNotFoundException("Produto não encontrado com o ID fornecido: " + payload.productId()));
+                .orElseThrow(() -> new ProductNotFoundException(payload.productId()));
 
         product.activate();
 
