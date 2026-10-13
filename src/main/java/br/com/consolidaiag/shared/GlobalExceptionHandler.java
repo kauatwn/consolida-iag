@@ -1,16 +1,18 @@
 package br.com.consolidaiag.shared;
 
-import br.com.consolidaiag.catalog.domain.exception.InvalidProductDataException;
-import br.com.consolidaiag.catalog.domain.exception.InvalidProductStateException;
-import br.com.consolidaiag.catalog.domain.exception.ProductAlreadyExistsException;
-import br.com.consolidaiag.catalog.domain.exception.ProductNotFoundException;
+import br.com.consolidaiag.catalog.domain.exceptions.InvalidProductDataException;
+import br.com.consolidaiag.catalog.domain.exceptions.InvalidProductStateException;
+import br.com.consolidaiag.catalog.domain.exceptions.ProductAlreadyExistsException;
+import br.com.consolidaiag.catalog.domain.exceptions.ProductNotFoundException;
 import br.com.consolidaiag.cycle.domain.exceptions.ActiveCycleAlreadyExistsException;
 import br.com.consolidaiag.cycle.domain.exceptions.CycleAlreadyClosedException;
 import br.com.consolidaiag.cycle.domain.exceptions.InvalidCycleDateException;
+import br.com.consolidaiag.cycle.domain.exceptions.WeeklyCycleNotFoundException;
 import br.com.consolidaiag.weeklyrequest.domain.exceptions.ActiveCycleNotFoundException;
 import br.com.consolidaiag.weeklyrequest.domain.exceptions.ClosedCycleImmutableException;
 import br.com.consolidaiag.weeklyrequest.domain.exceptions.DuplicateRequestForCycleException;
 import br.com.consolidaiag.weeklyrequest.domain.exceptions.InactiveProductSelectionException;
+import br.com.consolidaiag.weeklyrequest.domain.exceptions.WeeklyRequestNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +39,16 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(WeeklyCycleNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleWeeklyCycleNotFoundException(WeeklyCycleNotFoundException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(WeeklyRequestNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleWeeklyRequestNotFoundException(WeeklyRequestNotFoundException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(ActiveCycleAlreadyExistsException.class)
     public ResponseEntity<ApiErrorResponse> handleActiveCycleAlreadyExistsException(ActiveCycleAlreadyExistsException ex, HttpServletRequest request) {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage(), request);
@@ -54,7 +66,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ClosedCycleImmutableException.class)
     public ResponseEntity<ApiErrorResponse> handleClosedCycleImmutableException(ClosedCycleImmutableException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.FORBIDDEN, ex.getMessage(), request);
+        return buildResponse(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage(), request);
     }
 
     @ExceptionHandler(DuplicateRequestForCycleException.class)
@@ -93,6 +105,11 @@ public class GlobalExceptionHandler {
 
         String message = "Validation failed: " + errors;
         return buildResponse(HttpStatus.BAD_REQUEST, message, request);
+    }
+
+    @ExceptionHandler(DomainException.class)
+    public ResponseEntity<ApiErrorResponse> handleDomainException(DomainException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
     }
 
     @ExceptionHandler(Exception.class)
