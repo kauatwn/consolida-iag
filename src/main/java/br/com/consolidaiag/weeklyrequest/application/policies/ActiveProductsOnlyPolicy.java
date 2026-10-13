@@ -12,10 +12,11 @@ import java.util.UUID;
 
 /**
  * Valida a regra RN-02.1: Apenas produtos ativos do catálogo institucional podem compor uma solicitação.
+ * Assina os contratos de Submissão e Edição, pois a integridade do catálogo deve ser garantida em ambas as operações.
  */
 @Component
 @Order(2)
-public class ActiveProductsOnlyPolicy implements WeeklyRequestPolicy {
+public class ActiveProductsOnlyPolicy implements SubmitWeeklyRequestPolicy, EditWeeklyRequestPolicy {
 
     private final CheckActiveProductsPort checkActiveProductsPort;
 
