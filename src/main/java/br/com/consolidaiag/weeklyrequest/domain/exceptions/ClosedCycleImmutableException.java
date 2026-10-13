@@ -7,10 +7,10 @@ import br.com.consolidaiag.shared.DomainException;
  */
 public final class ClosedCycleImmutableException extends DomainException {
 
-    private final Long cycleId;
+    private final UUID cycleId;
 
-    public ClosedCycleImmutableException(Long cycleId) {
-        super(String.format("Cycle %d is closed and strictly immutable. Operations are not permitted (RN-02.5).", cycleId));
+    public ClosedCycleImmutableException(UUID cycleId) {
+        super(String.format("Cycle %s is closed and strictly immutable. Operations are not permitted (RN-02.5).", cycleId));
         this.cycleId = cycleId;
     }
 
@@ -19,7 +19,7 @@ public final class ClosedCycleImmutableException extends DomainException {
         this.cycleId = null;
     }
 
-    public Long getCycleId() {
+    public UUID getCycleId() {
         return cycleId;
     }
 }
