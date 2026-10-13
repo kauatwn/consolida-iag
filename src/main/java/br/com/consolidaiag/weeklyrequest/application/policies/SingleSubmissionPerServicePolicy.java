@@ -8,10 +8,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Valida a regra RN-02.4: Exatamente uma solicitação de compras por serviço é permitida para cada ciclo semanal.
+ * Assina apenas o contrato de Submissão, pois a validação de duplicidade não se aplica durante a edição de um pedido.
  */
 @Component
 @Order(1)
-public class SingleSubmissionPerServicePolicy implements WeeklyRequestPolicy {
+public class SingleSubmissionPerServicePolicy implements SubmitWeeklyRequestPolicy {
 
     private final WeeklyRequestRepositoryPort repository;
 
