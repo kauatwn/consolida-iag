@@ -1,8 +1,10 @@
 package br.com.consolidaiag.weeklyrequest.domain.exceptions;
 
+import br.com.consolidaiag.shared.DomainException;
+
 import java.math.BigDecimal;
 
-public final class InvalidQuantityException extends RuntimeException {
+public final class InvalidQuantityException extends DomainException {
 
     private final BigDecimal quantity;
 
