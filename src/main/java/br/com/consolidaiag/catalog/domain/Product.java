@@ -1,7 +1,7 @@
 package br.com.consolidaiag.catalog.domain;
 
-import br.com.consolidaiag.catalog.domain.exception.InvalidProductDataException;
-import br.com.consolidaiag.catalog.domain.exception.InvalidProductStateException;
+import br.com.consolidaiag.catalog.domain.exceptions.InvalidProductDataException;
+import br.com.consolidaiag.catalog.domain.exceptions.InvalidProductStateException;
 
 public final class Product {
 
@@ -12,11 +12,11 @@ public final class Product {
 
     private Product(ProductId id, String name, UnitMeasure unitMeasure, boolean active) {
         if (name == null || name.trim().isEmpty()) {
-            throw new InvalidProductDataException("O nome do produto é obrigatório.");
+            throw new InvalidProductDataException("Product name is required.");
         }
 
         if (unitMeasure == null) {
-            throw new InvalidProductDataException("A unidade de medida é obrigatória.");
+            throw new InvalidProductDataException("Unit of measure is required.");
         }
 
         this.id = id;
@@ -37,7 +37,7 @@ public final class Product {
 
     public void deactivate() {
         if (!this.active) {
-            throw new InvalidProductStateException("O produto já está inativo.");
+            throw new InvalidProductStateException("The product is already inactive.");
         }
 
         this.active = false;
@@ -45,19 +45,19 @@ public final class Product {
 
     public void activate() {
         if (this.active) {
-            throw new InvalidProductStateException("O produto já está ativo.");
+            throw new InvalidProductStateException("The product is already active.");
         }
 
         this.active = true;
     }
 
-    public void updateDetails(String newName, UnitMeasure newMeasure) {
+    public void editDetails(String newName, UnitMeasure newMeasure) {
         if (newName == null || newName.trim().isEmpty()) {
-            throw new InvalidProductDataException("O nome do produto não pode ser vazio.");
+            throw new InvalidProductDataException("Product name cannot be empty.");
         }
 
         if (newMeasure == null) {
-            throw new InvalidProductDataException("A unidade de medida não pode ser nula.");
+            throw new InvalidProductDataException("Unit of measure cannot be null.");
         }
 
         this.name = newName.trim();
