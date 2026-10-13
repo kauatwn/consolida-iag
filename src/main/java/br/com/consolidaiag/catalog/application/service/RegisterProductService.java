@@ -5,7 +5,7 @@ import br.com.consolidaiag.catalog.application.dtos.response.RegisterProductResp
 import br.com.consolidaiag.catalog.application.ports.in.RegisterProductUseCase;
 import br.com.consolidaiag.catalog.application.ports.out.ProductRepositoryPort;
 import br.com.consolidaiag.catalog.domain.Product;
-import br.com.consolidaiag.catalog.domain.exception.ProductAlreadyExistsException;
+import br.com.consolidaiag.catalog.domain.exceptions.ProductAlreadyExistsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +23,7 @@ public class RegisterProductService implements RegisterProductUseCase {
     public RegisterProductResponse execute(RegisterProductPayload payload) {
         // Regra de negócio: Impede cadastro de produtos com o mesmo nome
         if (productRepositoryPort.existsByName(payload.name())) {
-            throw new ProductAlreadyExistsException("Já existe um produto cadastrado com o nome: " + payload.name());
+            throw new ProductAlreadyExistsException("A product already exists with the name: '" + payload.name() + "'.");
         }
 
         // 1. Cria a entidade de domínio selada

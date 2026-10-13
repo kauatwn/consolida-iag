@@ -1,11 +1,12 @@
 package br.com.consolidaiag.catalog.application.service;
 
-import br.com.consolidaiag.catalog.application.dtos.request.EditProductDetailsPayLoad;
+import br.com.consolidaiag.catalog.application.dtos.request.EditProductDetailsPayload;
 import br.com.consolidaiag.catalog.application.ports.in.EditProductDetailsUseCase;
 import br.com.consolidaiag.catalog.application.ports.out.ProductRepositoryPort;
 import br.com.consolidaiag.catalog.domain.Product;
-import br.com.consolidaiag.catalog.domain.exception.ProductNotFoundException;
+import br.com.consolidaiag.catalog.domain.exceptions.ProductNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EditProductDetailsService implements EditProductDetailsUseCase {
@@ -17,12 +18,13 @@ public class EditProductDetailsService implements EditProductDetailsUseCase {
     }
 
     @Override
-    public void execute(EditProductDetailsPayLoad payload) {
+    @Transactional
+    public void execute(EditProductDetailsPayload payload) {
 
         Product product = productRepositoryPort.findById(payload.productId())
-                .orElseThrow(() -> new ProductNotFoundException("Produto não encontrado com o ID fornecido: " + payload.productId()));
+                .orElseThrow(() -> new ProductNotFoundException(payload.productId()));
 
-        product.updateDetails(payload.newName(), payload.newUnitMeasure());
+        product.editDetails(payload.newName(), payload.newUnitMeasure());
 
         productRepositoryPort.save(product);
     }
