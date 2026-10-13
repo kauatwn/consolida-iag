@@ -2,6 +2,8 @@ package br.com.consolidaiag.weeklyrequest.domain.exceptions;
 
 import br.com.consolidaiag.shared.DomainException;
 
+import java.util.UUID;
+
 /**
  * Lançada quando há tentativa de submeter, alterar ou remover solicitações em um ciclo já fechado (RN-02.5).
  */
