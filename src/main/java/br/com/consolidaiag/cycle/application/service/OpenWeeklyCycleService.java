@@ -2,7 +2,7 @@ package br.com.consolidaiag.cycle.application.service;
 
 import br.com.consolidaiag.cycle.application.dtos.request.OpenWeeklyCyclePayload;
 import br.com.consolidaiag.cycle.application.dtos.response.WeeklyCycleResponse;
-import br.com.consolidaiag.cycle.application.policies.OpenCyclePolicy;
+import br.com.consolidaiag.cycle.application.policies.OpenWeeklyCyclePolicy;
 import br.com.consolidaiag.cycle.application.ports.in.OpenWeeklyCycleUseCase;
 import br.com.consolidaiag.cycle.application.ports.out.WeeklyCycleRepositoryPort;
 import br.com.consolidaiag.cycle.domain.WeeklyCycle;
@@ -15,9 +15,9 @@ import java.util.List;
 public class OpenWeeklyCycleService implements OpenWeeklyCycleUseCase {
 
     private final WeeklyCycleRepositoryPort repository;
-    private final List<OpenCyclePolicy> policies;
+    private final List<OpenWeeklyCyclePolicy> policies;
 
-    public OpenWeeklyCycleService(WeeklyCycleRepositoryPort repository, List<OpenCyclePolicy> policies) {
+    public OpenWeeklyCycleService(WeeklyCycleRepositoryPort repository, List<OpenWeeklyCyclePolicy> policies) {
         this.repository = repository;
         this.policies = policies != null ? List.copyOf(policies) : List.of();
     }
