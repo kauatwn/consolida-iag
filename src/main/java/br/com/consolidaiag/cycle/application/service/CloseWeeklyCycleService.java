@@ -4,6 +4,7 @@ import br.com.consolidaiag.cycle.application.dtos.response.WeeklyCycleResponse;
 import br.com.consolidaiag.cycle.application.ports.in.CloseWeeklyCycleUseCase;
 import br.com.consolidaiag.cycle.application.ports.out.WeeklyCycleRepositoryPort;
 import br.com.consolidaiag.cycle.domain.WeeklyCycle;
+import br.com.consolidaiag.cycle.domain.exceptions.WeeklyCycleNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +22,8 @@ public class CloseWeeklyCycleService implements CloseWeeklyCycleUseCase {
     @Override
     @Transactional
     public WeeklyCycleResponse execute(UUID cycleId) {
-        // Obs: Crie uma CycleNotFoundException se desejar, ou use IllegalArgumentException provisoriamente
         WeeklyCycle cycle = repository.findById(cycleId)
-                .orElseThrow(() -> new IllegalArgumentException("Cycle not found with ID: " + cycleId));
+                .orElseThrow(() -> new WeeklyCycleNotFoundException(cycleId));
 
         cycle.close();
 
