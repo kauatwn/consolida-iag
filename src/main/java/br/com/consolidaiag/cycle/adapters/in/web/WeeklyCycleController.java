@@ -43,7 +43,7 @@ public class WeeklyCycleController implements WeeklyCycleApi {
     }
 
     @Override
-    @PutMapping("/{id}/close")
+    @PostMapping("/{id}/close")
     public ResponseEntity<WeeklyCycleResponse> closeCycle(@PathVariable UUID id) {
         WeeklyCycleResponse response = closeWeeklyCycleUseCase.execute(id);
 
@@ -51,6 +51,7 @@ public class WeeklyCycleController implements WeeklyCycleApi {
     }
 
     @Override
+    @GetMapping("/active")
     public ResponseEntity<WeeklyCycleResponse> consultActiveCycle() {
         Optional<WeeklyCycleResponse> response = consultActiveCycleUseCase.execute();
 
