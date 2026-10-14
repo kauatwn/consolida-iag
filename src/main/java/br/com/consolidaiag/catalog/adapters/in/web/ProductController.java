@@ -2,13 +2,11 @@ package br.com.consolidaiag.catalog.adapters.in.web;
 
 import br.com.consolidaiag.catalog.application.dtos.request.ActivateProductPayload;
 import br.com.consolidaiag.catalog.application.dtos.request.DeactivateProductPayload;
-import br.com.consolidaiag.catalog.application.dtos.request.EditProductDetailsPayLoad;
+import br.com.consolidaiag.catalog.application.dtos.request.EditProductDetailsPayload;
 import br.com.consolidaiag.catalog.application.dtos.request.RegisterProductPayload;
 import br.com.consolidaiag.catalog.application.dtos.response.CatalogProductResponse;
 import br.com.consolidaiag.catalog.application.dtos.response.RegisterProductResponse;
 import br.com.consolidaiag.catalog.application.ports.in.*;
-import br.com.consolidaiag.catalog.domain.ProductId;
-import br.com.consolidaiag.catalog.domain.UnitMeasure;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/products")
-public class ProductController {
+public class ProductController implements ProductApi {
 
     private final RegisterProductUseCase registerProductUseCase;
     private final ListCatalogProductsUseCase listCatalogProductsUseCase;
@@ -28,8 +26,11 @@ public class ProductController {
     private final ActivateProductUseCase activateProductUseCase;
     private final DeactivateProductUseCase deactivateProductUseCase;
 
-    public ProductController(RegisterProductUseCase registerProductUseCase, ListCatalogProductsUseCase listCatalogProductsUseCase,
-            EditProductDetailsUseCase editProductDetailsUseCase, ActivateProductUseCase activateProductUseCase,
+    public ProductController(
+            RegisterProductUseCase registerProductUseCase,
+            ListCatalogProductsUseCase listCatalogProductsUseCase,
+            EditProductDetailsUseCase editProductDetailsUseCase,
+            ActivateProductUseCase activateProductUseCase,
             DeactivateProductUseCase deactivateProductUseCase
     ) {
         this.registerProductUseCase = registerProductUseCase;
@@ -39,9 +40,9 @@ public class ProductController {
         this.deactivateProductUseCase = deactivateProductUseCase;
     }
 
+    @Override
     @PostMapping
-    public ResponseEntity<RegisterProductResponse> createProduct(@Valid @RequestBody RegisterProductPayload payload) {
-
+    public ResponseEntity<RegisterProductResponse> registerProduct(@Valid @RequestBody RegisterProductPayload payload) {
         RegisterProductResponse response = registerProductUseCase.execute(payload);
 
         URI location = ServletUriComponentsBuilder
@@ -53,41 +54,38 @@ public class ProductController {
         return ResponseEntity.created(location).body(response);
     }
 
+    @Override
     @GetMapping
-    public ResponseEntity<List<CatalogProductResponse>> listAll() {
+    public ResponseEntity<List<CatalogProductResponse>> listCatalogProducts() {
         List<CatalogProductResponse> response = listCatalogProductsUseCase.execute();
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateProductDetails(
+    public ResponseEntity<Void> editProductDetails(
             @PathVariable UUID id,
-            @Valid @RequestBody EditProductDetailsPayLoad payload
+            @Valid @RequestBody EditProductDetailsPayload payload
     ) {
-        EditProductDetailsPayLoad payLoad = new EditProductDetailsPayLoad(
-                id,
-                payload.newName(),
-                payload.newUnitMeasure()
-        );
-
-        editProductDetailsUseCase.execute(payLoad);
+        EditProductDetailsPayload command = new EditProductDetailsPayload(id, payload);
+        editProductDetailsUseCase.execute(command);
 
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PatchMapping("/{id}/activate")
     public ResponseEntity<Void> activateProduct(@PathVariable UUID id) {
         ActivateProductPayload payload = new ActivateProductPayload(id);
-
         activateProductUseCase.execute(payload);
 
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivateProduct(@PathVariable UUID id) {
         DeactivateProductPayload payload = new DeactivateProductPayload(id);
-
         deactivateProductUseCase.execute(payload);
 
         return ResponseEntity.noContent().build();
