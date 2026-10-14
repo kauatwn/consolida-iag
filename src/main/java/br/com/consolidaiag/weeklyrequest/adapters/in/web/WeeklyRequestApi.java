@@ -47,7 +47,7 @@ public interface WeeklyRequestApi {
 
     @Operation(
             summary = "Editar solicitação semanal",
-            description = "Atualiza os itens e observações de uma solicitação existente. Apenas permitido caso o ciclo correspondente ainda esteja aberto."
+            description = "Atualiza os itens e observações de uma solicitação existente. Apenas permitido caso o ciclo correspondente ainda esteja aberto (RN-02.6)."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -57,43 +57,71 @@ public interface WeeklyRequestApi {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Dados inválidos ou ciclo de compras já encontra-se fechado",
+                    description = "Dados inválidos de solicitação",
                     content = @Content
             ),
             @ApiResponse(
                     responseCode = "404",
                     description = "Solicitação não encontrada",
                     content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Ciclo de compras já encerrado e estritamente imutável (RN-02.5)",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Erro interno no servidor",
+                    content = @Content
             )
     })
     ResponseEntity<SubmitWeeklyRequestResponse> edit(
-            @PathVariable UUID id,
+            @io.swagger.v3.oas.annotations.Parameter(description = "Identificador único da solicitação", required = true) @PathVariable UUID id,
             @Valid @RequestBody EditWeeklyRequestPayload payload
     );
 
     @Operation(
             summary = "Consultar pedido atual do serviço",
-            description = "Consulta a solicitação feita pela Cozinha (CEI, CCA, CJ) no ciclo de compras que está atualmente aberto."
+            description = "Consulta a solicitação feita pelo serviço (CEI, CCA, CJ) no ciclo de compras que está atualmente aberto."
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Solicitação encontrada e retornada com sucesso"
+                    description = "Solicitação encontrada e retornada com sucesso",
+                    content = @Content(schema = @Schema(implementation = WeeklyRequestDetailsResponse.class))
             ),
             @ApiResponse(
                     responseCode = "204",
-                    description = "Nenhuma solicitação submetida pelo serviço no ciclo atual até o momento"
+                    description = "Nenhuma solicitação submetida pelo serviço no ciclo atual até o momento",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Erro interno no servidor",
+                    content = @Content
             )
     })
-    ResponseEntity<WeeklyRequestDetailsResponse> consultActiveRequest(@PathVariable ServiceCode serviceCode);
+    ResponseEntity<WeeklyRequestDetailsResponse> consultActiveRequest(
+            @io.swagger.v3.oas.annotations.Parameter(description = "Código do centro de custo/serviço (CEI, CCA, CJ)", required = true) @PathVariable ServiceCode serviceCode
+    );
 
     @Operation(
             summary = "Revisar pedidos do ciclo",
-            description = "Retorna todas as solicitações consolidadas feitas por todas as cozinhas em um ciclo específico. Utilizado pela Gestora para auditoria e compras."
+            description = "Retorna todas as solicitações feitas pelos serviços em um ciclo semanal específico. Utilizado pela Gestora para auditoria e conferência."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Lista de solicitações retornada com sucesso"
-    )
-    ResponseEntity<List<WeeklyRequestDetailsResponse>> reviewCycleRequests(@PathVariable UUID cycleId);
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Lista de solicitações retornada com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Erro interno no servidor",
+                    content = @Content
+            )
+    })
+    ResponseEntity<List<WeeklyRequestDetailsResponse>> reviewCycleRequests(
+            @io.swagger.v3.oas.annotations.Parameter(description = "Identificador único do ciclo semanal", required = true) @PathVariable UUID cycleId
+    );
 }

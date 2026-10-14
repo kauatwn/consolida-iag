@@ -62,14 +62,16 @@ public class WeeklyRequestController implements WeeklyRequestApi {
     }
 
     @Override
-    public ResponseEntity<WeeklyRequestDetailsResponse> consultActiveRequest(ServiceCode serviceCode) {
+    @GetMapping("/active/{serviceCode}")
+    public ResponseEntity<WeeklyRequestDetailsResponse> consultActiveRequest(@PathVariable ServiceCode serviceCode) {
         return consultActiveRequestUseCase.execute(serviceCode)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @Override
-    public ResponseEntity<List<WeeklyRequestDetailsResponse>> reviewCycleRequests(UUID cycleId) {
+    @GetMapping("/cycle/{cycleId}")
+    public ResponseEntity<List<WeeklyRequestDetailsResponse>> reviewCycleRequests(@PathVariable UUID cycleId) {
         List<WeeklyRequestDetailsResponse> responses = reviewCycleRequestsUseCase.execute(cycleId);
 
         return ResponseEntity.ok(responses);
