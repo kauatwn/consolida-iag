@@ -3,6 +3,7 @@ package br.com.consolidaiag.catalog.application.service;
 import br.com.consolidaiag.catalog.application.ports.in.VerifyActiveProductsUseCase;
 import br.com.consolidaiag.catalog.application.ports.out.ProductRepositoryPort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +18,7 @@ public class VerifyActiveProductsService implements VerifyActiveProductsUseCase 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean execute(List<UUID> productIds) {
         if (productIds == null || productIds.isEmpty()) {
             return true;
