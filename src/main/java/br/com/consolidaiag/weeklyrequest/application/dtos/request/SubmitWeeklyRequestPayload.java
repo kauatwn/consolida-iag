@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record SubmitWeeklyRequestPayload(
-        @NotNull(message = "O código do serviço é obrigatório")
+        @NotNull(message = "O serviço solicitante é obrigatório")
         ServiceCode serviceCode,
 
         String observation,
