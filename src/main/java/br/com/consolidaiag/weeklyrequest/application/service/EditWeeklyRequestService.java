@@ -55,7 +55,7 @@ public class EditWeeklyRequestService implements EditWeeklyRequestUseCase {
                 .map(item -> new RequestItem(item.productId(), item.quantity()))
                 .toList();
 
-        request.update(payload.observation(), newItems);
+        request.edit(payload.observation(), newItems);
 
         // 5. Re-executa as políticas (ex: verificar se os novos produtos estão ativos no catálogo)
         policies.forEach(policy -> policy.validate(request));

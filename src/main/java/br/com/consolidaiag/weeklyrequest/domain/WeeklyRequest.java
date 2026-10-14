@@ -56,7 +56,7 @@ public final class WeeklyRequest {
         this.items.add(new RequestItem(productId, quantity));
     }
 
-    public void update(String observation, List<RequestItem> items) {
+    public void edit(String observation, List<RequestItem> items) {
         this.observation = observation;
         Objects.requireNonNull(items, "New items list cannot be null.");
 
