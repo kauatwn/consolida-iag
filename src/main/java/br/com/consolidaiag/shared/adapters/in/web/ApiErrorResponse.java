@@ -1,4 +1,4 @@
-package br.com.consolidaiag.shared;
+package br.com.consolidaiag.shared.adapters.in.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
