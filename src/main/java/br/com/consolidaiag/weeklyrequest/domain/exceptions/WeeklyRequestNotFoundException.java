@@ -1,10 +1,10 @@
 package br.com.consolidaiag.weeklyrequest.domain.exceptions;
 
-import br.com.consolidaiag.shared.DomainException;
+import br.com.consolidaiag.shared.domain.exceptions.ResourceNotFoundException;
 
 import java.util.UUID;
 
-public final class WeeklyRequestNotFoundException extends DomainException {
+public final class WeeklyRequestNotFoundException extends ResourceNotFoundException {
 
     public WeeklyRequestNotFoundException(UUID requestId) {
         super(String.format("Weekly request not found with ID: %s", requestId));
