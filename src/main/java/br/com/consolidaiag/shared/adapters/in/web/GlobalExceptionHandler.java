@@ -2,7 +2,6 @@ package br.com.consolidaiag.shared.adapters.in.web;
 
 import br.com.consolidaiag.shared.domain.exceptions.BusinessRuleException;
 import br.com.consolidaiag.shared.domain.exceptions.ConflictException;
-import br.com.consolidaiag.shared.domain.exceptions.DomainException;
 import br.com.consolidaiag.shared.domain.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -45,11 +44,6 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
 
         return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed: " + errors, request);
-    }
-
-    @ExceptionHandler(DomainException.class)
-    public ResponseEntity<ApiErrorResponse> handleDomainException(DomainException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
     }
 
     @ExceptionHandler(Exception.class)
