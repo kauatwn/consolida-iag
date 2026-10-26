@@ -9,6 +9,8 @@ import br.com.consolidaiag.weeklyrequest.application.ports.out.WeeklyRequestRepo
 import br.com.consolidaiag.weeklyrequest.domain.RequestItem;
 import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequest;
 import br.com.consolidaiag.weeklyrequest.domain.exceptions.ActiveCycleNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,8 @@ import java.util.UUID;
 
 @Service
 public class SubmitWeeklyRequestService implements SubmitWeeklyRequestUseCase {
+
+    private static final Logger log = LoggerFactory.getLogger(SubmitWeeklyRequestService.class);
 
     private final FetchActiveCyclePort fetchActiveCyclePort;
     private final WeeklyRequestRepositoryPort repository;
@@ -32,13 +36,21 @@ public class SubmitWeeklyRequestService implements SubmitWeeklyRequestUseCase {
     @Override
     @Transactional
     public SubmitWeeklyRequestResponse execute(SubmitWeeklyRequestPayload payload) {
+        log.info("Iniciando submissão de requisição semanal para o código de serviço: {}", payload != null ? payload.serviceCode() : null);
+
         if (payload == null) {
+            log.warn("Tentativa de submissão falhou. O payload fornecido é nulo.");
             throw new IllegalArgumentException("Payload cannot be null.");
         }
 
         // RN-02.5: Resolução do ciclo semanal ativo
         UUID activeCycleId = fetchActiveCyclePort.getActiveCycleId()
-                .orElseThrow(ActiveCycleNotFoundException::new);
+                .orElseGet(() -> {
+                    log.warn("Nenhum ciclo ativo encontrado ao tentar submeter a requisição para o serviço: {}", payload.serviceCode());
+                    throw new ActiveCycleNotFoundException();
+                });
+
+        log.debug("Ciclo ativo resolvido com ID: {}. Mapeando itens da requisição...", activeCycleId);
 
         // Mapeia os itens do payload para a entidade de domínio
         List<RequestItem> items = payload.items().stream()
@@ -54,9 +66,13 @@ public class SubmitWeeklyRequestService implements SubmitWeeklyRequestUseCase {
         );
 
         // Executa todas as políticas de validação registradas (Validation Policies)
+        log.debug("Aplicando {} políticas de validação para a nova requisição...", policies.size());
         policies.forEach(policy -> policy.validate(request));
 
         WeeklyRequest saved = repository.save(request);
+
+        log.info("Requisição semanal submetida e salva com sucesso. ID da requisição: {}, Ciclo: {}",
+                saved.getId().value(), saved.getCycleId());
 
         return new SubmitWeeklyRequestResponse(
                 saved.getId().value(),

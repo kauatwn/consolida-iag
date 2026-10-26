@@ -4,6 +4,8 @@ import br.com.consolidaiag.weeklyrequest.application.dtos.response.RequestItemDe
 import br.com.consolidaiag.weeklyrequest.application.dtos.response.WeeklyRequestDetailsResponse;
 import br.com.consolidaiag.weeklyrequest.application.ports.in.ReviewCycleRequestsUseCase;
 import br.com.consolidaiag.weeklyrequest.application.ports.out.WeeklyRequestRepositoryPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +14,8 @@ import java.util.UUID;
 
 @Service
 public class ReviewCycleRequestsService implements ReviewCycleRequestsUseCase {
+
+    private static final Logger log = LoggerFactory.getLogger(ReviewCycleRequestsService.class);
 
     private final WeeklyRequestRepositoryPort repository;
 
@@ -22,7 +26,9 @@ public class ReviewCycleRequestsService implements ReviewCycleRequestsUseCase {
     @Override
     @Transactional(readOnly = true)
     public List<WeeklyRequestDetailsResponse> execute(UUID cycleId) {
-        return repository.findAllByCycleId(cycleId).stream()
+        log.info("Iniciando revisão das requisições para o ciclo com ID: {}", cycleId);
+
+        List<WeeklyRequestDetailsResponse> requests = repository.findAllByCycleId(cycleId).stream()
                 .map(request -> new WeeklyRequestDetailsResponse(
                         request.getId().value(),
                         request.getServiceCode(),
@@ -34,5 +40,9 @@ public class ReviewCycleRequestsService implements ReviewCycleRequestsUseCase {
                                 .toList()
                 ))
                 .toList();
+
+        log.info("Revisão de requisições do ciclo {} concluída. Total de requisições encontradas: {}", cycleId, requests.size());
+
+        return requests;
     }
 }
