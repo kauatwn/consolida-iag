@@ -32,7 +32,7 @@ public class DeactivateProductService implements DeactivateProductUseCase {
                     throw new ProductNotFoundException(payload.productId());
                 });
 
-        product.deactivate();
+        product.close();
 
         productRepositoryPort.save(product);
 

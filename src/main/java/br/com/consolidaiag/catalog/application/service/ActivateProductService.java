@@ -32,7 +32,7 @@ public class ActivateProductService implements ActivateProductUseCase {
                     throw new ProductNotFoundException(payload.productId());
                 });
 
-        product.activate();
+        product.open();
 
         productRepositoryPort.save(product);
 

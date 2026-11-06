@@ -46,7 +46,7 @@ public class RegisterProductService implements RegisterProductUseCase {
                 savedProduct.getId().value(),
                 savedProduct.getName(),
                 savedProduct.getUnitMeasure(),
-                savedProduct.isActive()
+                savedProduct.getProductStatus()
         );
     }
 }
