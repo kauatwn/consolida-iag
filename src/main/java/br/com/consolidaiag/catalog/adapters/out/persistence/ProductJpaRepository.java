@@ -1,6 +1,5 @@
 package br.com.consolidaiag.catalog.adapters.out.persistence;
 
-import br.com.consolidaiag.catalog.domain.ProductStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +12,6 @@ public interface ProductJpaRepository extends JpaRepository<ProductJpaEntity, UU
     // Método gerado automaticamente pelo Spring para checar a duplicidade
     boolean existsByNameIgnoreCase(String name);
 
-    @Query("SELECT COUNT(p) FROM ProductJpaEntity p WHERE p.id IN :ids AND p.status = 'OPEN'")
+    @Query("SELECT COUNT(p) FROM ProductJpaEntity p WHERE p.id IN :ids AND p.productStatus = 'ACTIVE'")
     long countByIdInAndActiveTrue(@Param("ids") List<UUID> ids);
 }

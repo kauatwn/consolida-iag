@@ -22,17 +22,17 @@ public class ProductJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "product_status", nullable = false)
-    private ProductStatus status;
+    private ProductStatus productStatus;
 
     // Construtor vazio exigido pelo Hibernate
     public ProductJpaEntity() {
     }
 
-    public ProductJpaEntity(UUID id, String name, UnitMeasure unitMeasure, ProductStatus status) {
+    public ProductJpaEntity(UUID id, String name, UnitMeasure unitMeasure, ProductStatus productStatus) {
         this.id = id;
         this.name = name;
         this.unitMeasure = unitMeasure;
-        this.status = status;
+        this.productStatus = productStatus;
     }
 
     // Getters e Setters anêmicos liberados (são para uso exclusivo do Framework/Mapper)
@@ -61,10 +61,10 @@ public class ProductJpaEntity {
     }
 
     public ProductStatus getProductStatus() {
-        return status;
+        return productStatus;
     }
 
-    public void setProductStatus(ProductStatus status) {
-        this.status = status;
+    public void setProductStatus(ProductStatus productStatus) {
+        this.productStatus = productStatus;
     }
 }
