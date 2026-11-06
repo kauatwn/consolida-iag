@@ -1,5 +1,6 @@
 package br.com.consolidaiag.catalog.adapters.out.persistence;
 
+import br.com.consolidaiag.catalog.domain.ProductStatus;
 import br.com.consolidaiag.catalog.domain.UnitMeasure;
 import jakarta.persistence.*;
 
@@ -19,18 +20,19 @@ public class ProductJpaEntity {
     @Column(name = "unit_measure", nullable = false)
     private UnitMeasure unitMeasure;
 
-    @Column(nullable = false)
-    private boolean active;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "product_status", nullable = false)
+    private ProductStatus status;
 
     // Construtor vazio exigido pelo Hibernate
     public ProductJpaEntity() {
     }
 
-    public ProductJpaEntity(UUID id, String name, UnitMeasure unitMeasure, boolean active) {
+    public ProductJpaEntity(UUID id, String name, UnitMeasure unitMeasure, ProductStatus status) {
         this.id = id;
         this.name = name;
         this.unitMeasure = unitMeasure;
-        this.active = active;
+        this.status = status;
     }
 
     // Getters e Setters anêmicos liberados (são para uso exclusivo do Framework/Mapper)
@@ -58,11 +60,11 @@ public class ProductJpaEntity {
         this.unitMeasure = unitMeasure;
     }
 
-    public boolean isActive() {
-        return active;
+    public ProductStatus getProductStatus() {
+        return status;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setProductStatus(ProductStatus status) {
+        this.status = status;
     }
 }
