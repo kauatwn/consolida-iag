@@ -8,9 +8,9 @@ public final class Product {
     private final ProductId id;
     private String name;
     private UnitMeasure unitMeasure;
-    private boolean active;
+    private ProductStatus productStatus;
 
-    private Product(ProductId id, String name, UnitMeasure unitMeasure, boolean active) {
+    private Product(ProductId id, String name, UnitMeasure unitMeasure, ProductStatus productStatus) {
         if (name == null || name.trim().isEmpty()) {
             throw new InvalidProductDataException("Product name is required.");
         }
@@ -19,36 +19,40 @@ public final class Product {
             throw new InvalidProductDataException("Unit of measure is required.");
         }
 
+        if (productStatus == null) {
+            throw new InvalidProductDataException("Product status is required.");
+        }
+
         this.id = id;
         this.name = name.trim();
         this.unitMeasure = unitMeasure;
-        this.active = active;
+        this.productStatus = productStatus;
     }
 
-    // Factory 1: Para a criação de um NOVO produto pelo sistema (nasce ativo por padrão)
+    // Factory 1: Para a criação de um NOVO produto pelo sistema (nasce ACTIVE por padrão)
     public static Product create(String name, UnitMeasure unitMeasure) {
-        return new Product(ProductId.generate(), name, unitMeasure, true);
+        return new Product(ProductId.generate(), name, unitMeasure, ProductStatus.ACTIVE);
     }
 
     // Factory 2: Para o JPA reconstituir o objeto vindo do banco de dados
-    public static Product reconstitute(ProductId id, String name, UnitMeasure unitMeasure, boolean active) {
-        return new Product(id, name, unitMeasure, active);
+    public static Product reconstitute(ProductId id, String name, UnitMeasure unitMeasure, ProductStatus productStatus) {
+        return new Product(id, name, unitMeasure, productStatus);
     }
 
-    public void deactivate() {
-        if (!this.active) {
+    public void close() {
+        if (this.productStatus == ProductStatus.INACTIVE) {
             throw new InvalidProductStateException("The product is already inactive.");
         }
 
-        this.active = false;
+        this.productStatus = ProductStatus.INACTIVE;
     }
 
-    public void activate() {
-        if (this.active) {
+    public void open() {
+        if (this.productStatus == ProductStatus.ACTIVE) {
             throw new InvalidProductStateException("The product is already active.");
         }
 
-        this.active = true;
+        this.productStatus = ProductStatus.ACTIVE;
     }
 
     public void editDetails(String newName, UnitMeasure newMeasure) {
@@ -76,7 +80,15 @@ public final class Product {
         return unitMeasure;
     }
 
+    public ProductStatus getProductStatus() {
+        return productStatus;
+    }
+
     public boolean isActive() {
-        return active;
+        return this.productStatus == ProductStatus.ACTIVE;
+    }
+
+    public boolean isInactive() {
+        return this.productStatus == ProductStatus.INACTIVE;
     }
 }
