@@ -2,6 +2,7 @@ package br.com.consolidaiag.catalog.adapters.out.persistence;
 
 import br.com.consolidaiag.catalog.domain.Product;
 import br.com.consolidaiag.catalog.domain.ProductId;
+import br.com.consolidaiag.catalog.domain.ProductStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,7 +16,7 @@ public class ProductPersistenceMapper {
                 domain.getId().value(),
                 domain.getName(),
                 domain.getUnitMeasure(),
-                domain.isActive()
+                domain.getProductStatus()
         );
     }
 
@@ -29,7 +30,7 @@ public class ProductPersistenceMapper {
                 new ProductId(entity.getId()),
                 entity.getName(),
                 entity.getUnitMeasure(),
-                entity.isActive()
+                entity.getProductStatus()
         );
     }
 }
