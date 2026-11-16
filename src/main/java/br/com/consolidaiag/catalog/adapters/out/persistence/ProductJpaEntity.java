@@ -2,13 +2,14 @@ package br.com.consolidaiag.catalog.adapters.out.persistence;
 
 import br.com.consolidaiag.catalog.domain.ProductStatus;
 import br.com.consolidaiag.catalog.domain.UnitMeasure;
+import br.com.consolidaiag.shared.adapters.out.persistence.AuditableJpaEntity;
 import jakarta.persistence.*;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "products")
-public class ProductJpaEntity {
+public class ProductJpaEntity extends AuditableJpaEntity {
 
     @Id
     private UUID id;

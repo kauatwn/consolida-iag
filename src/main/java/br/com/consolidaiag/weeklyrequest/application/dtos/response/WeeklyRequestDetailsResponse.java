@@ -3,6 +3,7 @@ package br.com.consolidaiag.weeklyrequest.application.dtos.response;
 import br.com.consolidaiag.weeklyrequest.domain.ServiceCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -39,9 +40,9 @@ public record WeeklyRequestDetailsResponse(
 
         @Schema(
                 description = "Data e horário em que a requisição foi registrada",
-                example = "2026-10-26T14:30:00"
+                example = "2026-10-26T14:30:00Z"
         )
-        LocalDateTime createdAt,
+        Instant createdAt,
 
         @Schema(
                 description = "Lista detalhada de itens que compõem esta requisição semanal"
