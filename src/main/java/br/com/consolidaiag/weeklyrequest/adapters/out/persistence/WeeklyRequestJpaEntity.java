@@ -1,5 +1,6 @@
 package br.com.consolidaiag.weeklyrequest.adapters.out.persistence;
 
+import br.com.consolidaiag.shared.adapters.out.persistence.AuditableJpaEntity;
 import br.com.consolidaiag.weeklyrequest.domain.ServiceCode;
 import jakarta.persistence.*;
 
@@ -15,7 +16,7 @@ import java.util.UUID;
                 @UniqueConstraint(name = "uq_service_cycle", columnNames = {"service_code", "cycle_id"})
         }
 )
-public class WeeklyRequestJpaEntity {
+public class WeeklyRequestJpaEntity extends AuditableJpaEntity {
 
     @Id
     private UUID id;
@@ -30,9 +31,6 @@ public class WeeklyRequestJpaEntity {
     @Column(name = "observation")
     private String observation;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     // Relacionamento bidirecional delegando o controle para a classe filha
     @OneToMany(mappedBy = "request", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RequestItemJpaEntity> items = new ArrayList<>();
@@ -40,12 +38,11 @@ public class WeeklyRequestJpaEntity {
     public WeeklyRequestJpaEntity() {
     }
 
-    public WeeklyRequestJpaEntity(UUID id, ServiceCode serviceCode, UUID cycleId, String observation, LocalDateTime createdAt, List<RequestItemJpaEntity> items) {
+    public WeeklyRequestJpaEntity(UUID id, ServiceCode serviceCode, UUID cycleId, String observation, List<RequestItemJpaEntity> items) {
         this.id = id;
         this.serviceCode = serviceCode;
         this.cycleId = cycleId;
         this.observation = observation;
-        this.createdAt = createdAt;
         this.items = items != null ? items : new ArrayList<>();
     }
 
@@ -79,14 +76,6 @@ public class WeeklyRequestJpaEntity {
 
     public void setObservation(String observation) {
         this.observation = observation;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public List<RequestItemJpaEntity> getItems() {

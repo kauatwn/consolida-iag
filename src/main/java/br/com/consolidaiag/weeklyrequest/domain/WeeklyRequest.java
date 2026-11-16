@@ -4,6 +4,7 @@ import br.com.consolidaiag.weeklyrequest.domain.exceptions.DuplicateRequestItemE
 import br.com.consolidaiag.weeklyrequest.domain.exceptions.EmptyRequestItemsException;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -14,15 +15,15 @@ public final class WeeklyRequest {
     private final UUID cycleId;
     private String observation;
     private final List<RequestItem> items;
-    private final LocalDateTime createdAt;
+    private final Instant createdAt;
 
     // Construtor privado: Ninguém fora da classe pode instanciar diretamente
-    private WeeklyRequest(WeeklyRequestId id, ServiceCode serviceCode, UUID cycleId, String observation, LocalDateTime createdAt, List<RequestItem> items) {
+    private WeeklyRequest(WeeklyRequestId id, ServiceCode serviceCode, UUID cycleId, String observation, Instant createdAt, List<RequestItem> items) {
         this.id = id;
         this.serviceCode = Objects.requireNonNull(serviceCode, "Service code cannot be null.");
         this.cycleId = Objects.requireNonNull(cycleId, "Cycle ID cannot be null.");
         this.observation = observation;
-        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
+        this.createdAt = createdAt != null ? createdAt : Instant.now();
         this.items = new ArrayList<>();
         Objects.requireNonNull(items, "Items list cannot be null.");
 
@@ -36,11 +37,11 @@ public final class WeeklyRequest {
 
     // Factory 1: Para a Líder de Cozinha criar uma NOVA solicitação
     public static WeeklyRequest create(ServiceCode serviceCode, UUID cycleId, String observation, List<RequestItem> items) {
-        return new WeeklyRequest(WeeklyRequestId.generate(), serviceCode, cycleId, observation, LocalDateTime.now(), items);
+        return new WeeklyRequest(WeeklyRequestId.generate(), serviceCode, cycleId, observation, Instant.now(), items);
     }
 
     // Factory 2: Para o JPA remontar o objeto vindo do banco de dados
-    public static WeeklyRequest reconstitute(WeeklyRequestId id, ServiceCode serviceCode, UUID cycleId, String observation, LocalDateTime createdAt, List<RequestItem> items) {
+    public static WeeklyRequest reconstitute(WeeklyRequestId id, ServiceCode serviceCode, UUID cycleId, String observation, Instant createdAt, List<RequestItem> items) {
         return new WeeklyRequest(id, serviceCode, cycleId, observation, createdAt, items);
     }
 
@@ -85,7 +86,7 @@ public final class WeeklyRequest {
         return observation;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 

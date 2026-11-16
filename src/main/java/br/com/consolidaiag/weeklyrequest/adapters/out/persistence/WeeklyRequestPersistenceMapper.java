@@ -5,6 +5,8 @@ import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequest;
 import br.com.consolidaiag.weeklyrequest.domain.WeeklyRequestId;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -21,7 +23,6 @@ public class WeeklyRequestPersistenceMapper {
         entity.setServiceCode(request.getServiceCode());
         entity.setCycleId(request.getCycleId());
         entity.setObservation(request.getObservation());
-        entity.setCreatedAt(request.getCreatedAt());
 
         // Amarração bidirecional diretamente no momento da extração
         entity.setItems(request.getItems().stream()

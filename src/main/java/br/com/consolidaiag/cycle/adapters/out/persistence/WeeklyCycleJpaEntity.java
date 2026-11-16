@@ -1,6 +1,7 @@
 package br.com.consolidaiag.cycle.adapters.out.persistence;
 
 import br.com.consolidaiag.cycle.domain.CycleStatus;
+import br.com.consolidaiag.shared.adapters.out.persistence.AuditableJpaEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -8,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "cycles")
-public class WeeklyCycleJpaEntity {
+public class WeeklyCycleJpaEntity extends AuditableJpaEntity {
 
     @Id
     private UUID id;
