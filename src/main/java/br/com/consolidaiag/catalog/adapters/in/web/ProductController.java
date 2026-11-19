@@ -9,6 +9,7 @@ import br.com.consolidaiag.catalog.application.dtos.response.RegisterProductResp
 import br.com.consolidaiag.catalog.application.ports.in.*;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -42,6 +43,7 @@ public class ProductController implements ProductApi {
 
     @Override
     @PostMapping
+    @PreAuthorize("hasRole('BUYER')")
     public ResponseEntity<RegisterProductResponse> registerProduct(@Valid @RequestBody RegisterProductPayload payload) {
         RegisterProductResponse response = registerProductUseCase.execute(payload);
 
@@ -56,6 +58,7 @@ public class ProductController implements ProductApi {
 
     @Override
     @GetMapping
+    @PreAuthorize("hasAnyRole('KITCHEN_LEADER', 'BUYER')")
     public ResponseEntity<List<CatalogProductResponse>> listCatalogProducts() {
         List<CatalogProductResponse> response = listCatalogProductsUseCase.execute();
         return ResponseEntity.ok(response);
@@ -63,6 +66,7 @@ public class ProductController implements ProductApi {
 
     @Override
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('BUYER')")
     public ResponseEntity<Void> editProductDetails(
             @PathVariable UUID id,
             @Valid @RequestBody EditProductDetailsPayload payload
@@ -75,6 +79,7 @@ public class ProductController implements ProductApi {
 
     @Override
     @PatchMapping("/{id}/activate")
+    @PreAuthorize("hasRole('BUYER')")
     public ResponseEntity<Void> activateProduct(@PathVariable UUID id) {
         ActivateProductPayload payload = new ActivateProductPayload(id);
         activateProductUseCase.execute(payload);
@@ -84,6 +89,7 @@ public class ProductController implements ProductApi {
 
     @Override
     @PatchMapping("/{id}/deactivate")
+    @PreAuthorize("hasRole('BUYER')")
     public ResponseEntity<Void> deactivateProduct(@PathVariable UUID id) {
         DeactivateProductPayload payload = new DeactivateProductPayload(id);
         deactivateProductUseCase.execute(payload);
