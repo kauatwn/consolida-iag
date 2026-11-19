@@ -2,6 +2,10 @@ spring:
   application:
     name: consolida-iag
 
+  threads:
+    virtual:
+      enabled: true
+
   datasource:
     url: jdbc:postgresql://localhost:5432/consolida_iag_db
     username: postgres
@@ -15,7 +19,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.postgresql.dialect.PostgreSQLDialect
 
   security:
     oauth2:
