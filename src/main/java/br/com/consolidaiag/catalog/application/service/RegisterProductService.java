@@ -37,16 +37,16 @@ public class RegisterProductService implements RegisterProductUseCase {
         Product product = Product.create(payload.name(), payload.unitMeasure());
 
         // 2. Salva através da interface (quem vai implementar isso é o JPA depois)
-        Product savedProduct = productRepositoryPort.save(product);
+        Product saved = productRepositoryPort.save(product);
 
-        log.info("Produto cadastrado com sucesso com o ID: {}", savedProduct.getId().value());
+        log.info("Produto cadastrado com sucesso com o ID: {}", saved.getId().value());
 
         // 3. Monta e devolve a resposta
         return new RegisterProductResponse(
-                savedProduct.getId().value(),
-                savedProduct.getName(),
-                savedProduct.getUnitMeasure(),
-                savedProduct.getProductStatus()
+                saved.getId().value(),
+                saved.getName(),
+                saved.getUnitMeasure(),
+                saved.getProductStatus()
         );
     }
 }
