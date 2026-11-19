@@ -2,6 +2,7 @@ package br.com.consolidaiag.shared.adapters.in.web;
 
 import br.com.consolidaiag.shared.domain.exceptions.BusinessRuleException;
 import br.com.consolidaiag.shared.domain.exceptions.ConflictException;
+import br.com.consolidaiag.shared.domain.exceptions.ForbiddenException;
 import br.com.consolidaiag.shared.domain.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -27,6 +28,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ApiErrorResponse> handleConflict(ConflictException ex, HttpServletRequest request) {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ApiErrorResponse> handleForbidden(ForbiddenException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.FORBIDDEN, ex.getMessage(), request);
     }
 
     @ExceptionHandler(BusinessRuleException.class)
