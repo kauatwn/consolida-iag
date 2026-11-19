@@ -1,11 +1,13 @@
 package br.com.consolidaiag.weeklyrequest.adapters.in.web;
 
+import br.com.consolidaiag.shared.adapters.in.security.AuthenticatedUser;
 import br.com.consolidaiag.weeklyrequest.application.dtos.request.EditWeeklyRequestPayload;
 import br.com.consolidaiag.weeklyrequest.application.dtos.request.SubmitWeeklyRequestPayload;
 import br.com.consolidaiag.weeklyrequest.application.dtos.response.SubmitWeeklyRequestResponse;
 import br.com.consolidaiag.weeklyrequest.application.dtos.response.WeeklyRequestDetailsResponse;
 import br.com.consolidaiag.weeklyrequest.domain.ServiceCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -38,12 +41,25 @@ public interface WeeklyRequestApi {
                     content = @Content
             ),
             @ApiResponse(
+                    responseCode = "401",
+                    description = "Não autenticado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Usuário sem permissão para submeter solicitações deste serviço",
+                    content = @Content
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "Erro interno no processamento da solicitação",
                     content = @Content
             )
     })
-    ResponseEntity<SubmitWeeklyRequestResponse> submit(@Valid @RequestBody SubmitWeeklyRequestPayload payload);
+    ResponseEntity<SubmitWeeklyRequestResponse> submit(
+            @Valid @RequestBody SubmitWeeklyRequestPayload payload,
+            @Parameter(hidden = true) @AuthenticationPrincipal AuthenticatedUser currentUser
+    );
 
     @Operation(
             summary = "Editar solicitação semanal",
@@ -58,6 +74,16 @@ public interface WeeklyRequestApi {
             @ApiResponse(
                     responseCode = "400",
                     description = "Dados inválidos de solicitação",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Não autenticado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Usuário sem permissão para editar esta solicitação",
                     content = @Content
             ),
             @ApiResponse(
@@ -77,7 +103,7 @@ public interface WeeklyRequestApi {
             )
     })
     ResponseEntity<SubmitWeeklyRequestResponse> edit(
-            @io.swagger.v3.oas.annotations.Parameter(description = "Identificador único da solicitação", required = true) @PathVariable UUID id,
+            @Parameter(description = "Identificador único da solicitação", required = true) @PathVariable UUID id,
             @Valid @RequestBody EditWeeklyRequestPayload payload
     );
 
@@ -97,13 +123,24 @@ public interface WeeklyRequestApi {
                     content = @Content
             ),
             @ApiResponse(
+                    responseCode = "401",
+                    description = "Não autenticado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Usuário sem permissão para consultar solicitações deste serviço",
+                    content = @Content
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "Erro interno no servidor",
                     content = @Content
             )
     })
     ResponseEntity<WeeklyRequestDetailsResponse> consultActiveRequest(
-            @io.swagger.v3.oas.annotations.Parameter(description = "Código do centro de custo/serviço (CEI, CCA, CJ)", required = true) @PathVariable ServiceCode serviceCode
+            @Parameter(description = "Código do centro de custo/serviço (CEI, CCA, CJ)", required = true) @PathVariable ServiceCode serviceCode,
+            @Parameter(hidden = true) @AuthenticationPrincipal AuthenticatedUser currentUser
     );
 
     @Operation(
@@ -116,12 +153,22 @@ public interface WeeklyRequestApi {
                     description = "Lista de solicitações retornada com sucesso"
             ),
             @ApiResponse(
+                    responseCode = "401",
+                    description = "Não autenticado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acesso restrito a Gestoras",
+                    content = @Content
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "Erro interno no servidor",
                     content = @Content
             )
     })
     ResponseEntity<List<WeeklyRequestDetailsResponse>> reviewCycleRequests(
-            @io.swagger.v3.oas.annotations.Parameter(description = "Identificador único do ciclo semanal", required = true) @PathVariable UUID cycleId
+            @Parameter(description = "Identificador único do ciclo semanal", required = true) @PathVariable UUID cycleId
     );
 }
