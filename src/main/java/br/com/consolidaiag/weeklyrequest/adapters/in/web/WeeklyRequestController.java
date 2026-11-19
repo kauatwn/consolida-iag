@@ -1,5 +1,6 @@
 package br.com.consolidaiag.weeklyrequest.adapters.in.web;
 
+import br.com.consolidaiag.shared.adapters.in.security.AuthenticatedUser;
 import br.com.consolidaiag.weeklyrequest.application.dtos.request.EditWeeklyRequestPayload;
 import br.com.consolidaiag.weeklyrequest.application.dtos.request.SubmitWeeklyRequestPayload;
 import br.com.consolidaiag.weeklyrequest.application.dtos.response.SubmitWeeklyRequestResponse;
@@ -9,8 +10,12 @@ import br.com.consolidaiag.weeklyrequest.application.ports.in.EditWeeklyRequestU
 import br.com.consolidaiag.weeklyrequest.application.ports.in.ReviewCycleRequestsUseCase;
 import br.com.consolidaiag.weeklyrequest.application.ports.in.SubmitWeeklyRequestUseCase;
 import br.com.consolidaiag.weeklyrequest.domain.ServiceCode;
+import br.com.consolidaiag.weeklyrequest.domain.exceptions.ServiceAccessDeniedException;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -41,7 +46,13 @@ public class WeeklyRequestController implements WeeklyRequestApi {
 
     @Override
     @PostMapping
-    public ResponseEntity<SubmitWeeklyRequestResponse> submit(@Valid @RequestBody SubmitWeeklyRequestPayload payload) {
+    @PreAuthorize("hasAnyRole('KITCHEN_LEADER', 'BUYER')")
+    public ResponseEntity<SubmitWeeklyRequestResponse> submit(
+            @Valid @RequestBody SubmitWeeklyRequestPayload payload,
+            @Parameter(hidden = true) @AuthenticationPrincipal AuthenticatedUser currentUser
+    ) {
+        validateServiceAccess(currentUser, payload.serviceCode());
+
         SubmitWeeklyRequestResponse response = submitWeeklyRequestUseCase.execute(payload);
 
         URI location = ServletUriComponentsBuilder
@@ -55,7 +66,11 @@ public class WeeklyRequestController implements WeeklyRequestApi {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<SubmitWeeklyRequestResponse> edit(@PathVariable UUID id, @Valid @RequestBody EditWeeklyRequestPayload payload) {
+    @PreAuthorize("hasAnyRole('KITCHEN_LEADER', 'BUYER')")
+    public ResponseEntity<SubmitWeeklyRequestResponse> edit(
+            @PathVariable UUID id,
+            @Valid @RequestBody EditWeeklyRequestPayload payload
+    ) {
         SubmitWeeklyRequestResponse response = editWeeklyRequestUseCase.execute(id, payload);
 
         return ResponseEntity.ok(response);
@@ -63,7 +78,13 @@ public class WeeklyRequestController implements WeeklyRequestApi {
 
     @Override
     @GetMapping("/active/{serviceCode}")
-    public ResponseEntity<WeeklyRequestDetailsResponse> consultActiveRequest(@PathVariable ServiceCode serviceCode) {
+    @PreAuthorize("hasAnyRole('KITCHEN_LEADER', 'BUYER')")
+    public ResponseEntity<WeeklyRequestDetailsResponse> consultActiveRequest(
+            @PathVariable ServiceCode serviceCode,
+            @Parameter(hidden = true) @AuthenticationPrincipal AuthenticatedUser currentUser
+    ) {
+        validateServiceAccess(currentUser, serviceCode);
+
         return consultActiveRequestUseCase.execute(serviceCode)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());
@@ -71,9 +92,16 @@ public class WeeklyRequestController implements WeeklyRequestApi {
 
     @Override
     @GetMapping("/cycle/{cycleId}")
+    @PreAuthorize("hasRole('BUYER')")
     public ResponseEntity<List<WeeklyRequestDetailsResponse>> reviewCycleRequests(@PathVariable UUID cycleId) {
         List<WeeklyRequestDetailsResponse> responses = reviewCycleRequestsUseCase.execute(cycleId);
 
         return ResponseEntity.ok(responses);
+    }
+
+    private void validateServiceAccess(AuthenticatedUser currentUser, ServiceCode targetService) {
+        if (currentUser == null || !currentUser.canAccessService(targetService)) {
+            throw new ServiceAccessDeniedException(targetService);
+        }
     }
 }
