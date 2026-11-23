@@ -35,4 +35,19 @@ public interface ConsolidationApi {
             @Parameter(description = "Filtro opcional para busca por nome do produto")
             @RequestParam(required = false) String search
     );
+
+    @Operation(
+            summary = "Obter relatório consolidado do ciclo ativo",
+            description = "Retorna o relatório consolidado dos insumos solicitados no ciclo semanal atualmente em aberto. Retorna 204 No Content se não houver ciclo ativo."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Relatório consolidado do ciclo ativo gerado com sucesso"),
+            @ApiResponse(responseCode = "204", description = "Nenhum ciclo ativo no momento"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado (Token JWT ausente ou inválido)")
+    })
+    @GetMapping("/active")
+    ResponseEntity<ConsolidatedReportResponse> getActiveConsolidatedReport(
+            @Parameter(description = "Filtro opcional para busca por nome do produto")
+            @RequestParam(required = false) String search
+    );
 }

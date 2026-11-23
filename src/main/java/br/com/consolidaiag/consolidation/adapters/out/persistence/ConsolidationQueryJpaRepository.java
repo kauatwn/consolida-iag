@@ -16,6 +16,7 @@ public interface ConsolidationQueryJpaRepository extends JpaRepository<WeeklyReq
                     p.id,
                     p.name,
                     CAST(p.unitMeasure AS string),
+                    CAST(p.category AS string),
                     SUM(i.quantity)
                 )
                 FROM WeeklyRequestJpaEntity r
@@ -23,11 +24,25 @@ public interface ConsolidationQueryJpaRepository extends JpaRepository<WeeklyReq
                 JOIN ProductJpaEntity p ON i.productId = p.id
                 WHERE r.cycleId = :cycleId
                   AND (:search IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%')))
-                GROUP BY p.id, p.name, p.unitMeasure
+                GROUP BY p.id, p.name, p.unitMeasure, p.category
                 ORDER BY p.name ASC
             """)
     List<ConsolidatedItemResponse> findConsolidatedItemsByCycleId(
             @Param("cycleId") UUID cycleId,
             @Param("search") String search
     );
+
+    @Query("""
+                SELECT new br.com.consolidaiag.consolidation.adapters.out.persistence.ItemBreakdownProjection(
+                    p.id,
+                    CAST(r.serviceCode AS string),
+                    SUM(i.quantity)
+                )
+                FROM WeeklyRequestJpaEntity r
+                JOIN r.items i
+                JOIN ProductJpaEntity p ON i.productId = p.id
+                WHERE r.cycleId = :cycleId
+                GROUP BY p.id, r.serviceCode
+            """)
+    List<ItemBreakdownProjection> findBreakdownByCycleId(@Param("cycleId") UUID cycleId);
 }
