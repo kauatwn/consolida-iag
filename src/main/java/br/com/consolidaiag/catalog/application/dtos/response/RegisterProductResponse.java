@@ -1,5 +1,6 @@
 package br.com.consolidaiag.catalog.application.dtos.response;
 
+import br.com.consolidaiag.catalog.domain.ProductCategory;
 import br.com.consolidaiag.catalog.domain.ProductStatus;
 import br.com.consolidaiag.catalog.domain.UnitMeasure;
 
@@ -9,6 +10,7 @@ public record RegisterProductResponse(
         UUID id,
         String name,
         UnitMeasure unitMeasure,
+        ProductCategory category,
         ProductStatus productStatus
 ) {
 }

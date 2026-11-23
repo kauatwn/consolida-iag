@@ -8,15 +8,26 @@ public final class Product {
     private final ProductId id;
     private String name;
     private UnitMeasure unitMeasure;
+    private ProductCategory category;
     private ProductStatus productStatus;
 
-    private Product(ProductId id, String name, UnitMeasure unitMeasure, ProductStatus productStatus) {
+    private Product(
+            ProductId id,
+            String name,
+            UnitMeasure unitMeasure,
+            ProductCategory category,
+            ProductStatus productStatus
+    ) {
         if (name == null || name.trim().isEmpty()) {
             throw new InvalidProductDataException("Product name is required.");
         }
 
         if (unitMeasure == null) {
             throw new InvalidProductDataException("Unit of measure is required.");
+        }
+
+        if (category == null) {
+            throw new InvalidProductDataException("Product category is required.");
         }
 
         if (productStatus == null) {
@@ -26,17 +37,22 @@ public final class Product {
         this.id = id;
         this.name = name.trim();
         this.unitMeasure = unitMeasure;
+        this.category = category;
         this.productStatus = productStatus;
     }
 
-    // Factory 1: Para a criação de um NOVO produto pelo sistema (nasce ACTIVE por padrão)
-    public static Product create(String name, UnitMeasure unitMeasure) {
-        return new Product(ProductId.generate(), name, unitMeasure, ProductStatus.ACTIVE);
+    public static Product create(String name, UnitMeasure unitMeasure, ProductCategory category) {
+        return new Product(ProductId.generate(), name, unitMeasure, category, ProductStatus.ACTIVE);
     }
 
-    // Factory 2: Para o JPA reconstituir o objeto vindo do banco de dados
-    public static Product reconstitute(ProductId id, String name, UnitMeasure unitMeasure, ProductStatus productStatus) {
-        return new Product(id, name, unitMeasure, productStatus);
+    public static Product reconstitute(
+            ProductId id,
+            String name,
+            UnitMeasure unitMeasure,
+            ProductCategory category,
+            ProductStatus productStatus
+    ) {
+        return new Product(id, name, unitMeasure, category, productStatus);
     }
 
     public void close() {
@@ -55,7 +71,7 @@ public final class Product {
         this.productStatus = ProductStatus.ACTIVE;
     }
 
-    public void editDetails(String newName, UnitMeasure newMeasure) {
+    public void editDetails(String newName, UnitMeasure newMeasure, ProductCategory newCategory) {
         if (newName == null || newName.trim().isEmpty()) {
             throw new InvalidProductDataException("Product name cannot be empty.");
         }
@@ -64,8 +80,13 @@ public final class Product {
             throw new InvalidProductDataException("Unit of measure cannot be null.");
         }
 
+        if (newCategory == null) {
+            throw new InvalidProductDataException("Product category cannot be null.");
+        }
+
         this.name = newName.trim();
         this.unitMeasure = newMeasure;
+        this.category = newCategory;
     }
 
     public ProductId getId() {
@@ -78,6 +99,10 @@ public final class Product {
 
     public UnitMeasure getUnitMeasure() {
         return unitMeasure;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
     }
 
     public ProductStatus getProductStatus() {

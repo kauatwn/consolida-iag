@@ -4,10 +4,7 @@ public enum UnitMeasure {
     KG("Quilograma"),
     L("Litro"),
     UN("Unidade"),
-    CX("Caixa"),
-    PCT("Pacote"),
-    G("Grama"),
-    ML("Mililitro");
+    PCT("Pacote");
 
     private final String description;
 

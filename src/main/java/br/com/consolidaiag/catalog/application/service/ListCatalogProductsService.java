@@ -31,6 +31,7 @@ public class ListCatalogProductsService implements ListCatalogProductsUseCase {
                         product.getId().value(),
                         product.getName(),
                         product.getUnitMeasure().name(),
+                        product.getCategory(),
                         product.getProductStatus()
                 ))
                 .toList();

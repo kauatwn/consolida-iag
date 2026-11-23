@@ -1,5 +1,6 @@
 package br.com.consolidaiag.catalog.application.dtos.request;
 
+import br.com.consolidaiag.catalog.domain.ProductCategory;
 import br.com.consolidaiag.catalog.domain.UnitMeasure;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -34,9 +35,16 @@ public record EditProductDetailsPayload(
                 example = "KG",
                 requiredMode = Schema.RequiredMode.REQUIRED
         )
-        UnitMeasure newUnitMeasure
+        UnitMeasure newUnitMeasure,
+        @NotBlank(message = "A nova categoria do produto é obrigatória")
+        @Schema(
+                description = "Nova categoria do produto (ex: ALIMENTOS, BEBIDAS, HIGIENE)",
+                example = "ALIMENTOS",
+                requiredMode = Schema.RequiredMode.REQUIRED
+        )
+        ProductCategory newCategory
 ) {
     public EditProductDetailsPayload(UUID productId, EditProductDetailsPayload body) {
-        this(productId, body.newName(), body.newUnitMeasure());
+        this(productId, body.newName(), body.newUnitMeasure(), body.newCategory());
     }
 }

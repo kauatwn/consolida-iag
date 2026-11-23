@@ -16,6 +16,7 @@ public class ProductPersistenceMapper {
                 domain.getId().value(),
                 domain.getName(),
                 domain.getUnitMeasure(),
+                domain.getCategory(),
                 domain.getProductStatus()
         );
     }
@@ -30,6 +31,7 @@ public class ProductPersistenceMapper {
                 new ProductId(entity.getId()),
                 entity.getName(),
                 entity.getUnitMeasure(),
+                entity.getCategory(),
                 entity.getProductStatus()
         );
     }

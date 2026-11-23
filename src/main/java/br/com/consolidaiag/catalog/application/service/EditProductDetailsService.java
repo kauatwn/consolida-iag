@@ -32,7 +32,7 @@ public class EditProductDetailsService implements EditProductDetailsUseCase {
                     throw new ProductNotFoundException(payload.productId());
                 });
 
-        product.editDetails(payload.newName(), payload.newUnitMeasure());
+        product.editDetails(payload.newName(), payload.newUnitMeasure(), payload.newCategory());
 
         productRepositoryPort.save(product);
 
