@@ -1,5 +1,6 @@
 package br.com.consolidaiag.catalog.application.dtos.request;
 
+import br.com.consolidaiag.catalog.domain.ProductCategory;
 import br.com.consolidaiag.catalog.domain.UnitMeasure;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +26,14 @@ public record RegisterProductPayload(
                 example = "KG",
                 requiredMode = Schema.RequiredMode.REQUIRED
         )
-        UnitMeasure unitMeasure
+        UnitMeasure unitMeasure,
+
+        @NotBlank(message = "A categoria do produto é obrigatória")
+        @Schema(
+                description = "Categoria do produto (ex: ALIMENTOS, BEBIDAS, LIMPEZA, HIGIENE PESSOAL)",
+                example = "ALIMENTOS",
+                requiredMode = Schema.RequiredMode.REQUIRED
+        )
+        ProductCategory category
 ) {
 }

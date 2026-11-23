@@ -34,7 +34,7 @@ public class RegisterProductService implements RegisterProductUseCase {
         }
 
         // 1. Cria a entidade de domínio selada
-        Product product = Product.create(payload.name(), payload.unitMeasure());
+        Product product = Product.create(payload.name(), payload.unitMeasure(), payload.category());
 
         // 2. Salva através da interface (quem vai implementar isso é o JPA depois)
         Product saved = productRepositoryPort.save(product);
@@ -46,6 +46,7 @@ public class RegisterProductService implements RegisterProductUseCase {
                 saved.getId().value(),
                 saved.getName(),
                 saved.getUnitMeasure(),
+                saved.getCategory(),
                 saved.getProductStatus()
         );
     }

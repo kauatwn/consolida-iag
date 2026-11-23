@@ -1,5 +1,6 @@
 package br.com.consolidaiag.catalog.adapters.out.persistence;
 
+import br.com.consolidaiag.catalog.domain.ProductCategory;
 import br.com.consolidaiag.catalog.domain.ProductStatus;
 import br.com.consolidaiag.catalog.domain.UnitMeasure;
 import br.com.consolidaiag.shared.adapters.out.persistence.AuditableJpaEntity;
@@ -22,21 +23,30 @@ public class ProductJpaEntity extends AuditableJpaEntity {
     private UnitMeasure unitMeasure;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ProductCategory category;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "product_status", nullable = false)
     private ProductStatus productStatus;
 
-    // Construtor vazio exigido pelo Hibernate
     public ProductJpaEntity() {
     }
 
-    public ProductJpaEntity(UUID id, String name, UnitMeasure unitMeasure, ProductStatus productStatus) {
+    public ProductJpaEntity(
+            UUID id,
+            String name,
+            UnitMeasure unitMeasure,
+            ProductCategory category,
+            ProductStatus productStatus
+    ) {
         this.id = id;
         this.name = name;
         this.unitMeasure = unitMeasure;
+        this.category = category;
         this.productStatus = productStatus;
     }
 
-    // Getters e Setters anêmicos liberados (são para uso exclusivo do Framework/Mapper)
     public UUID getId() {
         return id;
     }
@@ -59,6 +69,14 @@ public class ProductJpaEntity extends AuditableJpaEntity {
 
     public void setUnitMeasure(UnitMeasure unitMeasure) {
         this.unitMeasure = unitMeasure;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ProductCategory category) {
+        this.category = category;
     }
 
     public ProductStatus getProductStatus() {
